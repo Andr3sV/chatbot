@@ -77,7 +77,7 @@ export default function SettingsPage() {
           />
 
           <Button
-            className="w-full"
+            className="w-full bg-black text-white hover:bg-black/90"
             onClick={handleSave}
             disabled={saveMutation.isPending}
           >

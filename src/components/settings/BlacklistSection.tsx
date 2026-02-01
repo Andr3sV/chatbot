@@ -34,8 +34,8 @@ export function BlacklistSection({ blacklist, onChange }: BlacklistSectionProps)
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20">
-          <Ban className="h-4 w-4 text-primary" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#BEFF50]">
+          <Ban className="h-4 w-4 text-black" />
         </div>
         <h3 className="font-semibold">Lista Negra (Blacklist)</h3>
       </div>
@@ -50,7 +50,12 @@ export function BlacklistSection({ blacklist, onChange }: BlacklistSectionProps)
           placeholder="+1 234 567 890"
           className="flex-1"
         />
-        <Button type="button" size="icon" onClick={handleAdd}>
+        <Button
+          type="button"
+          size="icon"
+          onClick={handleAdd}
+          className="bg-black text-white hover:bg-black/90"
+        >
           <Plus className="h-4 w-4" />
           <span className="sr-only">Añadir</span>
         </Button>

@@ -27,8 +27,8 @@ export function WaitTimeSection({
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20">
-          <Clock className="h-4 w-4 text-primary" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#BEFF50]">
+          <Clock className="h-4 w-4 text-black" />
         </div>
         <h3 className="font-semibold">Tiempo de espera</h3>
       </div>
@@ -46,7 +46,7 @@ export function WaitTimeSection({
             onClick={() => onChange(opt.value)}
             className={cn(
               waitTimeMinutes === opt.value &&
-                "ring-2 ring-primary ring-offset-2 ring-offset-background"
+                "bg-black text-white ring-2 ring-black/30 ring-offset-2 ring-offset-background hover:bg-black/90"
             )}
           >
             {opt.label}
