@@ -2,7 +2,7 @@
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Bot } from "lucide-react";
+import { Bot, Loader2 } from "lucide-react";
 import type { Message } from "@/lib/api/messaging-types";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +13,7 @@ interface MessageBubbleProps {
 export function MessageBubble({ message }: MessageBubbleProps) {
   const isClient = message.sender === "client";
   const isPending = message.status === "pending_approval";
+  const isSending = message.status === "sending";
 
   return (
     <div
@@ -44,7 +45,9 @@ export function MessageBubble({ message }: MessageBubbleProps) {
               ? "rounded-tl-sm bg-muted text-foreground"
               : isPending
                 ? "rounded-tr-sm bg-white border border-[#BEFF50] italic"
-                : "rounded-tr-sm bg-[#DBFF95] text-foreground"
+                : isSending
+                  ? "rounded-tr-sm bg-[#DBFF95]/70 text-foreground opacity-80"
+                  : "rounded-tr-sm bg-[#DBFF95] text-foreground"
           )}
         >
           <p className="whitespace-pre-wrap break-words text-sm">
@@ -65,7 +68,14 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                   <span>• Justo ahora</span>
                 </>
               )
-              : message.sender === "agent"
+              : isSending
+                ? (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <span>Enviando...</span>
+                  </>
+                )
+                : message.sender === "agent"
                 ? (
                   <>
                     Enviado por <Bot className="h-3 w-3" /> • {format(message.timestamp, "h:mm a", { locale: es })}

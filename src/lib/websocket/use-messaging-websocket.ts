@@ -61,30 +61,47 @@ export function useMessagingWebSocket(url?: string) {
   const wsRef = useRef<WebSocket | null>(null);
   const handlerRef = useRef<EventHandler | null>(null);
 
+  const normalizeMessage = useCallback((msg: Message): Message => {
+    const ts = msg.timestamp;
+    return {
+      ...msg,
+      timestamp: ts instanceof Date ? ts : new Date(ts as string),
+    };
+  }, []);
+
   const handleEvent = useCallback<EventHandler>(
     (event) => {
       switch (event.type) {
         case "new_message":
-        case "message_updated":
-          queryClient.invalidateQueries({
-            queryKey: ["messages", event.payload.conversationId],
+        case "ai_suggestion": {
+          const msg = normalizeMessage(event.payload);
+          queryClient.setQueryData<Message[]>(["messages", msg.conversationId], (old) => {
+            if (!old) return [msg];
+            if (old.some((m) => m.id === msg.id)) return old;
+            return [...old, msg];
           });
-          queryClient.invalidateQueries({ queryKey: ["conversations"] });
+          void queryClient.invalidateQueries({ queryKey: ["conversations"] });
           break;
-        case "ai_suggestion":
-          queryClient.invalidateQueries({
-            queryKey: ["messages", event.payload.conversationId],
+        }
+        case "message_updated": {
+          const msg = normalizeMessage(event.payload);
+          queryClient.setQueryData<Message[]>(["messages", msg.conversationId], (old) => {
+            if (!old) return [msg];
+            const idx = old.findIndex((m) => m.id === msg.id);
+            if (idx === -1) return [...old, msg];
+            const next = [...old];
+            next[idx] = msg;
+            return next;
           });
-          queryClient.invalidateQueries({ queryKey: ["conversations"] });
+          void queryClient.invalidateQueries({ queryKey: ["conversations"] });
           break;
+        }
         case "conversation_updated":
-          queryClient.invalidateQueries({
-            queryKey: ["conversations"],
-          });
+          void queryClient.invalidateQueries({ queryKey: ["conversations"] });
           break;
       }
     },
-    [queryClient]
+    [queryClient, normalizeMessage]
   );
 
   useEffect(() => {

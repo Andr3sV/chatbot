@@ -10,7 +10,7 @@ export interface Message {
   content: string;
   sender: "client" | "agent" | "ai";
   timestamp: Date;
-  status: "sent" | "delivered" | "draft" | "pending_approval";
+  status: "sent" | "delivered" | "draft" | "pending_approval" | "sending";
   aiSuggestion?: string;
 }
 

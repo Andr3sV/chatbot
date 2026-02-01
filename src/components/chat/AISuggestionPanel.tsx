@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
+import type { Message } from "@/lib/api/messaging-types";
 import { Pencil, Send, Smile, Trash2 } from "lucide-react";
 
 const EmojiPicker = dynamic(
@@ -48,16 +49,56 @@ export function AISuggestionPanel({
   const approveMutation = useMutation({
     mutationFn: (content?: string) =>
       client.approveAISuggestion(conversationId, messageId, content),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+    onMutate: async (content) => {
+      await queryClient.cancelQueries({ queryKey: ["messages", conversationId] });
+      const previous = queryClient.getQueryData<Message[]>(["messages", conversationId]);
+      const optimisticUpdate: Message = {
+        id: messageId,
+        conversationId,
+        content: content ?? suggestedText,
+        sender: "agent",
+        timestamp: new Date(),
+        status: "sent",
+      };
+      queryClient.setQueryData<Message[]>(["messages", conversationId], (old) =>
+        old?.map((m) => (m.id === messageId ? optimisticUpdate : m)) ?? [optimisticUpdate]
+      );
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      return { previous };
+    },
+    onSuccess: (serverMessage) => {
+      queryClient.setQueryData<Message[]>(["messages", conversationId], (old) =>
+        old?.map((m) => (m.id === messageId ? serverMessage : m)) ?? [serverMessage]
+      );
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+    onError: (_err, _content, context) => {
+      if (context?.previous != null) {
+        queryClient.setQueryData(["messages", conversationId], context.previous);
+      }
       void queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });
 
   const discardMutation = useMutation({
     mutationFn: () => client.discardAISuggestion(conversationId, messageId),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["messages", conversationId] });
+      const previous = queryClient.getQueryData<Message[]>(["messages", conversationId]);
+      queryClient.setQueryData<Message[]>(["messages", conversationId], (old) =>
+        old?.filter((m) => m.id !== messageId) ?? []
+      );
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      return { previous };
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+    onError: (_err, _content, context) => {
+      if (context?.previous != null) {
+        queryClient.setQueryData(["messages", conversationId], context.previous);
+      }
       void queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });

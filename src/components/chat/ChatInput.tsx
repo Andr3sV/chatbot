@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
+import type { Message } from "@/lib/api/messaging-types";
 import { Send, Smile } from "lucide-react";
 
 const EmojiPicker = dynamic(
@@ -42,8 +43,36 @@ export function ChatInput({ conversationId }: ChatInputProps) {
 
   const sendMutation = useMutation({
     mutationFn: (content: string) => client.sendMessage(conversationId, content),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+    onMutate: async (content) => {
+      await queryClient.cancelQueries({ queryKey: ["messages", conversationId] });
+      const previous = queryClient.getQueryData<Message[]>(["messages", conversationId]);
+      const tempId = `temp-${Date.now()}`;
+      const optimisticMessage: Message = {
+        id: tempId,
+        conversationId,
+        content,
+        sender: "agent",
+        timestamp: new Date(),
+        status: "sending",
+      };
+      queryClient.setQueryData<Message[]>(["messages", conversationId], (old) => [
+        ...(old ?? []),
+        optimisticMessage,
+      ]);
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      return { previous, tempId };
+    },
+    onSuccess: (serverMessage, _content, context) => {
+      if (!context) return;
+      queryClient.setQueryData<Message[]>(["messages", conversationId], (old) =>
+        old?.map((m) => (m.id === context.tempId ? serverMessage : m)) ?? [serverMessage]
+      );
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+    onError: (_err, _content, context) => {
+      if (context?.previous != null) {
+        queryClient.setQueryData(["messages", conversationId], context.previous);
+      }
       void queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });
