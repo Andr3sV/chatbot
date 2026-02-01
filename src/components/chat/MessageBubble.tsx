@@ -42,8 +42,9 @@ export function MessageBubble({ message }: MessageBubbleProps) {
             "rounded-2xl px-4 py-2",
             isClient
               ? "rounded-tl-sm bg-muted text-foreground"
-              : "rounded-tr-sm bg-[#DBFF95] text-foreground",
-            isPending && "border border-[#c4e87a] italic"
+              : isPending
+                ? "rounded-tr-sm bg-white border border-[#BEFF50] italic"
+                : "rounded-tr-sm bg-[#DBFF95] text-foreground"
           )}
         >
           <p className="whitespace-pre-wrap break-words text-sm">
@@ -54,10 +55,23 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           {!isClient && message.sender === "ai" && (
             <Bot className="h-3 w-3 text-muted-foreground" />
           )}
-          <span className="text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
             {isPending
-              ? "Borrador • Justo ahora"
-              : format(message.timestamp, "h:mm a", { locale: es })}
+              ? (
+                <>
+                  <span className="rounded-full bg-[#DBFF95] px-2 py-0.5 text-xs font-medium text-foreground">
+                    Borrador
+                  </span>
+                  <span>• Justo ahora</span>
+                </>
+              )
+              : message.sender === "agent"
+                ? (
+                  <>
+                    Enviado por <Bot className="h-3 w-3" /> • {format(message.timestamp, "h:mm a", { locale: es })}
+                  </>
+                )
+                : format(message.timestamp, "h:mm a", { locale: es })}
           </span>
         </div>
       </div>
