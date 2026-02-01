@@ -5,10 +5,12 @@ import { format, isToday, isYesterday } from "date-fns";
 import { es } from "date-fns/locale";
 import { MessageBubble } from "./MessageBubble";
 import type { Message } from "@/lib/api/messaging-types";
+import { cn } from "@/lib/utils";
 
 interface MessageListProps {
   messages: Message[];
   isLoading: boolean;
+  hasFloatingTopAlert?: boolean;
 }
 
 function getDateLabel(date: Date): string {
@@ -17,7 +19,11 @@ function getDateLabel(date: Date): string {
   return format(date, "d 'de' MMMM", { locale: es });
 }
 
-export function MessageList({ messages, isLoading }: MessageListProps) {
+export function MessageList({
+  messages,
+  isLoading,
+  hasFloatingTopAlert = false,
+}: MessageListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,7 +65,10 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
   return (
     <div
       ref={scrollRef}
-      className="flex-1 overflow-y-auto"
+      className={cn(
+        "flex-1 overflow-y-auto pb-44",
+        hasFloatingTopAlert && "pt-20"
+      )}
     >
       <div className="flex flex-col gap-4 px-4 py-4">
         {dates.map((dateKey) => {

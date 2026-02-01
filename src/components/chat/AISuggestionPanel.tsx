@@ -1,11 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
-import { Pencil, Send, Trash2 } from "lucide-react";
+import { Pencil, Send, Smile, Trash2 } from "lucide-react";
+
+const EmojiPicker = dynamic(
+  () => import("emoji-picker-react").then((mod) => mod.default),
+  { ssr: false }
+);
 
 interface AISuggestionPanelProps {
   conversationId: string;
@@ -20,6 +31,17 @@ export function AISuggestionPanel({
 }: AISuggestionPanelProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(suggestedText);
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!isEditing) return;
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "0px";
+    const newHeight = Math.min(Math.max(el.scrollHeight, 40), 150);
+    el.style.height = `${newHeight}px`;
+  }, [editedText, isEditing]);
   const queryClient = useQueryClient();
   const client = getMessagingClient();
 
@@ -51,18 +73,52 @@ export function AISuggestionPanel({
     discardMutation.mutate();
   };
 
+  const handleEmojiClick = (emojiData: { emoji: string }) => {
+    if (!isEditing) {
+      setEditedText(suggestedText + emojiData.emoji);
+      setIsEditing(true);
+    } else {
+      setEditedText((prev) => prev + emojiData.emoji);
+    }
+  };
+
   const isDisabled =
     approveMutation.isPending || discardMutation.isPending;
 
   return (
-    <div className="bg-transparent p-4">
-      <div className="flex items-center gap-2 rounded-3xl border border-border bg-white px-4 py-2 shadow-sm">
-        <div className="flex min-h-10 flex-1 items-center">
+    <div>
+      <div className="flex items-center gap-2 rounded-3xl border border-border bg-white px-4 py-2 shadow-lg">
+        <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              disabled={isDisabled}
+              aria-label="Elegir emoji"
+              className="h-9 w-9 shrink-0 rounded-full text-muted-foreground hover:text-foreground"
+            >
+              <Smile className="h-5 w-5" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            align="start"
+            side="top"
+            className="w-auto border-0 p-0"
+          >
+            <EmojiPicker
+              onEmojiClick={handleEmojiClick}
+              searchPlaceholder="Buscar emoji..."
+            />
+          </PopoverContent>
+        </Popover>
+        <div className="flex min-h-10 min-w-0 flex-1 items-center">
           {isEditing ? (
             <Textarea
+              ref={textareaRef}
               value={editedText}
               onChange={(e) => setEditedText(e.target.value)}
-              className="min-h-[40px] flex-1 resize-none border-0 bg-transparent text-sm shadow-none focus-visible:ring-0"
+              className="min-h-[40px] max-h-[150px] min-w-0 flex-1 resize-none overflow-y-auto overflow-x-hidden border-0 bg-transparent text-sm shadow-none focus-visible:ring-0"
               placeholder="Edita el mensaje..."
             />
           ) : (

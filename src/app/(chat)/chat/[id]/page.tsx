@@ -23,27 +23,33 @@ export default function ChatPage() {
   const pendingMessage = messages.find((m) => m.status === "pending_approval");
 
   return (
-    <div className="flex h-full flex-col border-l border-border chat-background-pattern">
+    <div className="relative flex h-full flex-col border-l border-border chat-background-pattern">
       <ChatHeader
         conversationId={id}
         hasPendingApproval={!!pendingMessage}
       />
-      {pendingMessage && (
-        <div className="px-4 py-2">
-          <PendingApprovalAlert show />
-        </div>
-      )}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <MessageList messages={messages} isLoading={isLoading} />
-        {pendingMessage ? (
-          <AISuggestionPanel
-            conversationId={id}
-            messageId={pendingMessage.id}
-            suggestedText={pendingMessage.aiSuggestion ?? pendingMessage.content}
-          />
-        ) : (
-          <ChatInput conversationId={id} />
+      <div className="relative flex flex-1 flex-col overflow-hidden">
+        <MessageList
+          messages={messages}
+          isLoading={isLoading}
+          hasFloatingTopAlert={!!pendingMessage}
+        />
+        {pendingMessage && (
+          <div className="absolute left-0 right-0 top-0 z-10 px-4 pt-2">
+            <PendingApprovalAlert show className="shadow-lg" />
+          </div>
         )}
+        <div className="absolute bottom-0 left-0 right-0 z-10 flex flex-col gap-2 px-4 pb-4 pt-2">
+          {pendingMessage ? (
+            <AISuggestionPanel
+              conversationId={id}
+              messageId={pendingMessage.id}
+              suggestedText={pendingMessage.aiSuggestion ?? pendingMessage.content}
+            />
+          ) : (
+            <ChatInput conversationId={id} />
+          )}
+        </div>
       </div>
     </div>
   );

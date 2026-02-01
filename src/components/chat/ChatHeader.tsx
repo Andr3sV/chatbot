@@ -9,15 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
-import { MoreVertical, TestTube2 } from "lucide-react";
+import { TestTube2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SimulationPanel } from "./SimulationPanel";
 
@@ -90,18 +84,6 @@ export function ChatHeader({
             />
           </DialogContent>
         </Dialog>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="Más opciones">
-              <MoreVertical className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Ver perfil</DropdownMenuItem>
-            <DropdownMenuItem>Silenciar</DropdownMenuItem>
-            <DropdownMenuItem>Archivar chat</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </header>
   );

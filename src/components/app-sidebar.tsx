@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -9,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { MessageSquare, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function getInitials(phone: string, name?: string) {
@@ -43,12 +44,13 @@ export function AppSidebar() {
       )}
     >
       <div className="flex h-14 items-center gap-2 border-b border-[hsl(var(--sidebar-border))] px-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-          <MessageSquare className="h-4 w-4 text-primary" />
-        </div>
-        <span className="font-semibold text-[hsl(var(--sidebar-foreground))]">
-          Plinng
-        </span>
+        <Image
+          src="/Plinng.png"
+          alt="Plinng"
+          width={32}
+          height={32}
+          className="h-5 w-auto max-w-full object-contain"
+        />
       </div>
       <div className="flex flex-1 flex-col overflow-hidden">
         <ScrollArea className="flex-1 px-2 pt-2">
