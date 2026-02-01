@@ -55,8 +55,8 @@ export function AISuggestionPanel({
     approveMutation.isPending || discardMutation.isPending;
 
   return (
-    <div className="border-t border-border bg-card p-4">
-      <div className="flex items-center gap-2 rounded-3xl border border-border bg-muted/30 px-4 py-2 shadow-sm">
+    <div className="bg-transparent p-4">
+      <div className="flex items-center gap-2 rounded-3xl border border-border bg-white px-4 py-2 shadow-sm">
         <div className="flex min-h-10 flex-1 items-center">
           {isEditing ? (
             <Textarea

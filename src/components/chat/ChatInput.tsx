@@ -35,9 +35,9 @@ export function ChatInput({ conversationId }: ChatInputProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center gap-2 border-t border-border bg-card p-4"
+      className="flex items-center gap-2 bg-transparent p-4"
     >
-      <div className="flex flex-1 items-center gap-2 rounded-3xl border border-border bg-muted/30 px-4 py-2 shadow-sm">
+      <div className="flex flex-1 items-center gap-2 rounded-3xl border border-border bg-white px-4 py-2 shadow-sm">
         <Input
           value={text}
           onChange={(e) => setText(e.target.value)}

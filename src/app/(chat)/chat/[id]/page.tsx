@@ -23,7 +23,7 @@ export default function ChatPage() {
   const pendingMessage = messages.find((m) => m.status === "pending_approval");
 
   return (
-    <div className="flex h-full flex-col border-l border-border bg-background">
+    <div className="flex h-full flex-col border-l border-border chat-background-pattern">
       <ChatHeader
         conversationId={id}
         hasPendingApproval={!!pendingMessage}
