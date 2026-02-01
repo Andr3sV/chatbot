@@ -21,6 +21,7 @@ Interfaz de webchat estilo WhatsApp Web con agente IA que responde automáticame
 - **Configuración Copilot**: Blacklist, tiempo de espera, activar IA para nuevos contactos
 - **WebSocket mock**: Simula eventos en tiempo real (nuevos mensajes cada 15s)
 - **Cliente mock**: Datos de prueba persistentes en localStorage
+- **Modo simulación**: Panel para simular mensajes como cliente de Luis (barbería). Envía mensajes como si fueras Carlos, María o Pedro; la IA sugiere respuestas contextuales (reservas, precios, horarios)
 
 ## Desarrollo
 
@@ -30,6 +31,15 @@ npm run dev
 ```
 
 Abre [http://localhost:3000](http://localhost:3000).
+
+### Probar la simulación Plinng-Luis
+
+1. Entra a una conversación (ej. Carlos, María o Pedro - clientes de Luis)
+2. Usa el panel "Modo prueba - Simular como cliente" debajo del header
+3. Escribe un mensaje o usa los botones rápidos (disponibilidad, precio, horario)
+4. Pulsa "Enviar como cliente" - el mensaje aparece como burbuja gris
+5. Tras ~1.5s la IA sugiere una respuesta contextual
+6. Como Luis: Edita, Envía o Descarta la sugerencia
 
 ## Build
 

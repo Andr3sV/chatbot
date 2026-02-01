@@ -42,8 +42,8 @@ export function MessageBubble({ message }: MessageBubbleProps) {
             "rounded-2xl px-4 py-2",
             isClient
               ? "rounded-tl-sm bg-muted text-foreground"
-              : "rounded-tr-sm bg-primary text-primary-foreground",
-            isPending && "border border-primary/50 italic"
+              : "rounded-tr-sm bg-[#DBFF95] text-foreground",
+            isPending && "border border-[#c4e87a] italic"
           )}
         >
           <p className="whitespace-pre-wrap break-words text-sm">

@@ -4,6 +4,7 @@ import type {
   Message,
   CopilotConfig,
 } from "./messaging-types";
+import { generateBarbershopSuggestion } from "./ai-suggestion-generator";
 
 const CONFIG_STORAGE_KEY = "chatbot_copilot_config";
 const MESSAGES_STORAGE_KEY = "chatbot_mock_messages";
@@ -97,12 +98,12 @@ function createSeedMessages(): Record<string, Message[]> {
       id: "m2",
       conversationId: "conv1",
       content:
-        "[Borrador] ¡Hola! Sí, tenemos espacios disponibles a las 10:00 AM y 4:00 PM. ¿Te gustaría reservar?",
+        "[Borrador] ¡Hola! Sí, tenemos espacios disponibles. ¿Te gustaría reservar para mañana? Tenemos 10:00 AM y 4:00 PM disponibles.",
       sender: "ai",
       timestamp: ten46,
       status: "pending_approval",
       aiSuggestion:
-        "¡Hola! Sí, tenemos espacios disponibles a las 10:00 AM y 4:00 PM. ¿Te gustaría reservar?",
+        "¡Hola! Sí, tenemos espacios disponibles. ¿Te gustaría reservar para mañana? Tenemos 10:00 AM y 4:00 PM disponibles.",
     },
   ];
 
@@ -118,7 +119,7 @@ function createSeedMessages(): Record<string, Message[]> {
     {
       id: "m4",
       conversationId: "conv2",
-      content: "¡Buenos días! ¿En qué puedo ayudarte?",
+      content: "¡Hola! Bienvenido a Barbería Luis. ¿En qué puedo ayudarte?",
       sender: "ai",
       timestamp: new Date(ten46.getTime() - 86400000),
       status: "sent",
@@ -137,7 +138,7 @@ function createSeedMessages(): Record<string, Message[]> {
     {
       id: "m6",
       conversationId: "conv3",
-      content: "Nuestro horario es de lunes a viernes, 9:00 AM a 6:00 PM.",
+      content: "Estamos abiertos lunes a sábado de 9:00 AM a 7:00 PM. Domingos cerrado.",
       sender: "ai",
       timestamp: new Date(ten46.getTime() - 3600000),
       status: "sent",
@@ -156,6 +157,7 @@ const seedConversations: Conversation[] = [
     id: "conv1",
     contact: {
       phone: "+52 1 55 1234 5678",
+      name: "Carlos",
       status: "online",
     },
     unreadCount: 0,
@@ -164,7 +166,7 @@ const seedConversations: Conversation[] = [
     id: "conv2",
     contact: {
       phone: "+55 11 99999-9999",
-      name: "Maria",
+      name: "María",
       status: "offline",
     },
     unreadCount: 1,
@@ -173,6 +175,7 @@ const seedConversations: Conversation[] = [
     id: "conv3",
     contact: {
       phone: "+1 555-0199",
+      name: "Pedro",
       status: "online",
     },
     unreadCount: 0,
@@ -305,6 +308,56 @@ export function simulateWebSocketMessage(
     id: `m${Date.now()}`,
     conversationId,
     timestamp: new Date(),
+  };
+  msgs.push(newMsg);
+  messages[conversationId] = msgs;
+  _messages = messages;
+  saveMessages(messages);
+}
+
+/**
+ * Simula que un cliente envía un mensaje a Luis.
+ * Añade el mensaje con sender "client" y status "delivered".
+ */
+export function simulateCustomerMessage(
+  conversationId: string,
+  content: string
+): void {
+  const messages = _messages ?? loadMessages();
+  const msgs = messages[conversationId] ?? [];
+  const newMsg: Message = {
+    id: `m${Date.now()}`,
+    conversationId,
+    content,
+    sender: "client",
+    timestamp: new Date(),
+    status: "delivered",
+  };
+  msgs.push(newMsg);
+  messages[conversationId] = msgs;
+  _messages = messages;
+  saveMessages(messages);
+}
+
+/**
+ * Simula que la IA genera una sugerencia de respuesta tras el mensaje del cliente.
+ * Añade mensaje con sender "ai", status "pending_approval" y aiSuggestion.
+ */
+export function simulateAISuggestion(
+  conversationId: string,
+  clientMessageContent: string
+): void {
+  const messages = _messages ?? loadMessages();
+  const msgs = messages[conversationId] ?? [];
+  const suggestion = generateBarbershopSuggestion(clientMessageContent);
+  const newMsg: Message = {
+    id: `m${Date.now()}`,
+    conversationId,
+    content: `[Borrador] ${suggestion}`,
+    sender: "ai",
+    timestamp: new Date(),
+    status: "pending_approval",
+    aiSuggestion: suggestion,
   };
   msgs.push(newMsg);
   messages[conversationId] = msgs;

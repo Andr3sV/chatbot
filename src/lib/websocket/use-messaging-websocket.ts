@@ -15,7 +15,7 @@ export type WebSocketEvent =
 
 type EventHandler = (event: WebSocketEvent) => void;
 
-const MOCK_WS_ENABLED = process.env.NEXT_PUBLIC_MOCK_WEBSOCKET !== "false";
+const MOCK_WS_ENABLED = process.env.NEXT_PUBLIC_MOCK_WEBSOCKET === "true";
 
 function createMockWebSocket(handler: EventHandler): () => void {
   let intervalId: ReturnType<typeof setInterval> | null = null;
