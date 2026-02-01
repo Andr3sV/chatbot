@@ -1,16 +1,9 @@
-import { AppSidebar } from "@/components/app-sidebar";
+import { ChatLayoutWrapper } from "@/components/chat-layout-wrapper";
 
 export default function ChatLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex h-screen bg-background">
-      <AppSidebar />
-      <main className="flex flex-1 flex-col overflow-hidden">
-        {children}
-      </main>
-    </div>
-  );
+  return <ChatLayoutWrapper>{children}</ChatLayoutWrapper>;
 }

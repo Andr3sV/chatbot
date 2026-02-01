@@ -4,10 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
+import { getAvatarDataUri } from "@/lib/avatar-utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Settings, User } from "lucide-react";
@@ -38,23 +39,33 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        "flex h-screen w-72 shrink-0 flex-col",
+        "flex h-screen w-full shrink-0 flex-col md:w-72",
         "border-r border-[hsl(var(--sidebar-border))]",
         "bg-[hsl(var(--sidebar-background))]"
       )}
     >
-      <div className="flex h-14 items-center gap-2 border-b border-[hsl(var(--sidebar-border))] px-4">
+      <div className="flex h-14 items-center justify-between gap-2 border-b border-[hsl(var(--sidebar-border))] px-4 md:h-14">
         <Image
           src="/Plinng.png"
           alt="Plinng"
-          width={32}
-          height={32}
-          className="h-5 w-auto max-w-full object-contain"
+          width={48}
+          height={48}
+          className="h-8 w-auto max-w-full object-contain md:h-5"
         />
+        <Link
+          href="/settings"
+          className={cn(
+            "flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors md:h-9 md:w-9",
+            "text-muted-foreground hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-accent-foreground))]"
+          )}
+          aria-label="Configuración"
+        >
+          <Settings className="h-5 w-5 md:h-4 md:w-4" />
+        </Link>
       </div>
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        <ScrollArea className="min-h-0 min-w-0 flex-1 overflow-hidden px-2 pt-2 pr-1">
-          <div className="min-w-0 max-w-full space-y-0.5 pb-4 pr-3">
+        <ScrollArea className="min-h-0 min-w-0 flex-1 overflow-hidden px-3 pt-2 pr-2">
+          <div className="min-w-0 max-w-full space-y-1 pb-4 md:space-y-0.5">
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
                 <p className="text-sm text-muted-foreground">
@@ -78,29 +89,36 @@ export function AppSidebar() {
                     key={conv.id}
                     href={`/chat/${conv.id}`}
                     className={cn(
-                      "grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-3 py-2.5 transition-colors",
+                      "grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 border-b border-[hsl(var(--sidebar-border))] px-3 py-4 transition-colors last:border-b-0 md:border-b-0 md:py-2.5",
                       "hover:bg-[hsl(var(--sidebar-accent))]",
                       isActive && "bg-[hsl(var(--sidebar-accent))] font-medium"
                     )}
                   >
-                    <Avatar className="h-9 w-9 shrink-0">
-                      <AvatarFallback className="bg-muted text-xs font-medium text-muted-foreground">
+                    <Avatar className="h-11 w-11 shrink-0 md:h-9 md:w-9">
+                      <AvatarImage
+                        src={getAvatarDataUri(
+                          conv.contact.name ?? conv.contact.phone,
+                          88
+                        )}
+                        alt={displayName}
+                      />
+                      <AvatarFallback className="bg-[#BEFF50] text-sm font-medium text-black md:text-xs">
                         {getInitials(conv.contact.phone, conv.contact.name)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 overflow-hidden">
                       <div className="flex flex-col gap-0.5">
-                        <span className="truncate text-sm font-medium">
+                        <span className="truncate text-[14px] font-medium md:text-sm">
                           {displayName}
                         </span>
                         <div className="flex items-center justify-between gap-2">
-                          <span className="truncate text-xs text-muted-foreground">
+                          <span className="truncate text-[14px] text-muted-foreground md:text-xs">
                             {lastPreview}
                             {lastPreview.length >= 35 ? "..." : ""}
                           </span>
                           {conv.unreadCount > 0 && (
                             <Badge
-                              className="h-4 min-w-4 shrink-0 bg-[#BEFF50] px-1 text-[10px] text-black"
+                              className="h-5 min-w-5 shrink-0 bg-[#BEFF50] px-1.5 text-[12px] text-black md:h-4 md:min-w-4 md:px-1 md:text-[10px]"
                             >
                               {conv.unreadCount}
                             </Badge>
@@ -111,7 +129,7 @@ export function AppSidebar() {
                     <div className="flex shrink-0 items-center gap-1.5 justify-self-end">
                       {hasPendingApproval && (
                         <div
-                          className="flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-600"
+                          className="flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-600 md:h-6 md:w-6"
                           aria-label="Requiere intervención humana"
                           title="Requiere intervención humana"
                         >
@@ -119,7 +137,7 @@ export function AppSidebar() {
                         </div>
                       )}
                       {lastMsg && (
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-[14px] text-muted-foreground md:text-xs">
                           {format(lastMsg.timestamp, "HH:mm", { locale: es })}
                         </span>
                       )}
@@ -130,18 +148,6 @@ export function AppSidebar() {
             )}
           </div>
         </ScrollArea>
-        <div className="border-t border-[hsl(var(--sidebar-border))] p-2">
-          <Link
-            href="/settings"
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors",
-              "text-muted-foreground hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-accent-foreground))]"
-            )}
-          >
-            <Settings className="h-4 w-4 shrink-0" />
-            <span className="text-sm font-medium">Configuración</span>
-          </Link>
-        </div>
       </div>
     </aside>
   );

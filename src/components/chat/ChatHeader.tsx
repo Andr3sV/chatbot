@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import {
   Dialog,
@@ -9,9 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
-import { TestTube2 } from "lucide-react";
+import { getAvatarDataUri } from "@/lib/avatar-utils";
+import { ArrowLeft, TestTube2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SimulationPanel } from "./SimulationPanel";
 
@@ -54,13 +56,24 @@ export function ChatHeader({
 
   return (
     <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3">
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+        <Link
+          href="/"
+          className="shrink-0 rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
+          aria-label="Volver a conversaciones"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Link>
         <Avatar className="h-10 w-10 shrink-0">
-          <AvatarFallback className="bg-muted text-sm font-medium text-muted-foreground">
+          <AvatarImage
+            src={getAvatarDataUri(contact.name ?? contact.phone, 80)}
+            alt={displayName}
+          />
+          <AvatarFallback className="bg-[#BEFF50] text-sm font-medium text-black">
             {getInitials(contact.phone, contact.name)}
           </AvatarFallback>
         </Avatar>
-        <h1 className="text-lg font-semibold">{displayName}</h1>
+        <h1 className="min-w-0 truncate text-lg font-semibold">{displayName}</h1>
       </div>
       <div className="flex items-center gap-1">
         <Dialog open={simulatorOpen} onOpenChange={setSimulatorOpen}>
