@@ -10,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Settings } from "lucide-react";
+import { Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function getInitials(phone: string, name?: string) {
@@ -52,9 +52,9 @@ export function AppSidebar() {
           className="h-5 w-auto max-w-full object-contain"
         />
       </div>
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <ScrollArea className="flex-1 px-2 pt-2">
-          <div className="space-y-0.5 pb-4">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <ScrollArea className="min-h-0 min-w-0 flex-1 overflow-hidden px-2 pt-2 pr-1">
+          <div className="min-w-0 max-w-full space-y-0.5 pb-4 pr-3">
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
                 <p className="text-sm text-muted-foreground">
@@ -66,6 +66,9 @@ export function AppSidebar() {
                 const isActive = pathname === `/chat/${conv.id}`;
                 const displayName = conv.contact.name ?? conv.contact.phone;
                 const lastMsg = conv.lastMessage;
+                const hasPendingApproval =
+                  conv.hasPendingApproval ??
+                  lastMsg?.status === "pending_approval";
                 const lastPreview = lastMsg
                   ? lastMsg.content.replace(/^\[Borrador\]\s*/, "").slice(0, 35)
                   : "Sin mensajes";
@@ -75,7 +78,7 @@ export function AppSidebar() {
                     key={conv.id}
                     href={`/chat/${conv.id}`}
                     className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors",
+                      "grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-3 py-2.5 transition-colors",
                       "hover:bg-[hsl(var(--sidebar-accent))]",
                       isActive && "bg-[hsl(var(--sidebar-accent))] font-medium"
                     )}
@@ -85,31 +88,41 @@ export function AppSidebar() {
                         {getInitials(conv.contact.phone, conv.contact.name)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 overflow-hidden">
+                      <div className="flex flex-col gap-0.5">
                         <span className="truncate text-sm font-medium">
                           {displayName}
                         </span>
-                        {lastMsg && (
-                          <span className="shrink-0 text-xs text-muted-foreground">
-                            {format(lastMsg.timestamp, "HH:mm", { locale: es })}
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="truncate text-xs text-muted-foreground">
+                            {lastPreview}
+                            {lastPreview.length >= 35 ? "..." : ""}
                           </span>
-                        )}
+                          {conv.unreadCount > 0 && (
+                            <Badge
+                              className="h-4 min-w-4 shrink-0 bg-[#BEFF50] px-1 text-[10px] text-black"
+                            >
+                              {conv.unreadCount}
+                            </Badge>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="truncate text-xs text-muted-foreground">
-                          {lastPreview}
-                          {lastPreview.length >= 35 ? "..." : ""}
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1.5 justify-self-end">
+                      {hasPendingApproval && (
+                        <div
+                          className="flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-600"
+                          aria-label="Requiere intervención humana"
+                          title="Requiere intervención humana"
+                        >
+                          <User className="h-3.5 w-3.5" />
+                        </div>
+                      )}
+                      {lastMsg && (
+                        <span className="text-xs text-muted-foreground">
+                          {format(lastMsg.timestamp, "HH:mm", { locale: es })}
                         </span>
-                        {conv.unreadCount > 0 && (
-                          <Badge
-                            variant="default"
-                            className="h-4 min-w-4 shrink-0 px-1 text-[10px]"
-                          >
-                            {conv.unreadCount}
-                          </Badge>
-                        )}
-                      </div>
+                      )}
                     </div>
                   </Link>
                 );

@@ -194,20 +194,25 @@ export function createMockMessagingClient(): IMessagingClient {
   return {
     async getConversations(): Promise<Conversation[]> {
       await delay(200);
-      const convs = [...seedConversations];
+      const currentMessages = _messages ?? loadMessages();
+      const convs = seedConversations.map((c) => ({ ...c }));
       for (const conv of convs) {
-        const msgs = messages[conv.id] ?? [];
+        const msgs = currentMessages[conv.id] ?? [];
         const last = msgs[msgs.length - 1];
         if (last) {
           conv.lastMessage = last;
         }
+        conv.hasPendingApproval = msgs.some(
+          (m) => m.status === "pending_approval"
+        );
       }
       return convs;
     },
 
     async getMessages(conversationId: string): Promise<Message[]> {
       await delay(150);
-      return messages[conversationId] ?? [];
+      const currentMessages = _messages ?? loadMessages();
+      return currentMessages[conversationId] ?? [];
     },
 
     async sendMessage(
@@ -215,7 +220,8 @@ export function createMockMessagingClient(): IMessagingClient {
       content: string
     ): Promise<Message> {
       await delay(300);
-      const msgs = messages[conversationId] ?? [];
+      const currentMessages = _messages ?? loadMessages();
+      const msgs = currentMessages[conversationId] ?? [];
       const newMsg: Message = {
         id: `m${Date.now()}`,
         conversationId,
@@ -225,8 +231,9 @@ export function createMockMessagingClient(): IMessagingClient {
         status: "sent",
       };
       msgs.push(newMsg);
-      messages[conversationId] = msgs;
-      saveMessages(messages);
+      currentMessages[conversationId] = msgs;
+      _messages = currentMessages;
+      saveMessages(currentMessages);
       return newMsg;
     },
 
@@ -236,7 +243,8 @@ export function createMockMessagingClient(): IMessagingClient {
       content?: string
     ): Promise<Message> {
       await delay(300);
-      const msgs = messages[conversationId] ?? [];
+      const currentMessages = _messages ?? loadMessages();
+      const msgs = currentMessages[conversationId] ?? [];
       const idx = msgs.findIndex((m) => m.id === messageId);
       if (idx === -1) {
         throw new Error("Message not found");
@@ -252,8 +260,9 @@ export function createMockMessagingClient(): IMessagingClient {
         aiSuggestion: undefined,
       };
       msgs[idx] = updated;
-      messages[conversationId] = msgs;
-      saveMessages(messages);
+      currentMessages[conversationId] = msgs;
+      _messages = currentMessages;
+      saveMessages(currentMessages);
       return updated;
     },
 
@@ -262,12 +271,14 @@ export function createMockMessagingClient(): IMessagingClient {
       messageId: string
     ): Promise<void> {
       await delay(200);
-      const msgs = messages[conversationId] ?? [];
+      const currentMessages = _messages ?? loadMessages();
+      const msgs = currentMessages[conversationId] ?? [];
       const idx = msgs.findIndex((m) => m.id === messageId);
       if (idx !== -1) {
         msgs.splice(idx, 1);
-        messages[conversationId] = msgs;
-        saveMessages(messages);
+        currentMessages[conversationId] = msgs;
+        _messages = currentMessages;
+        saveMessages(currentMessages);
       }
     },
 

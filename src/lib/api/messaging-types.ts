@@ -19,6 +19,7 @@ export interface Conversation {
   contact: Contact;
   lastMessage?: Message;
   unreadCount: number;
+  hasPendingApproval?: boolean;
 }
 
 export interface CopilotConfig {
