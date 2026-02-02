@@ -115,11 +115,11 @@ export function AISuggestionPanel({
             size="sm"
             onClick={handleDiscard}
             disabled={isDisabled}
-            aria-label="Cancelar"
+            aria-label="Rechazar"
             className="h-9 gap-1.5 rounded-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
           >
             <X className="h-4 w-4" />
-            Cancelar
+            Rechazar
           </Button>
           <Button
             size="sm"

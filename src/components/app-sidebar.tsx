@@ -175,7 +175,7 @@ export function AppSidebar() {
         </Link>
       </div>
       {selectedChannel !== "all" && filterTags.length > 0 && (
-        <div className="mt-4 shrink-0 overflow-x-auto overflow-y-hidden px-3 pb-2">
+        <div className="scrollbar-hide mt-4 shrink-0 overflow-x-auto overflow-y-hidden px-3 pb-2">
           <div className="flex gap-1.5">
             {filterTags.map((tag) => (
               <button
