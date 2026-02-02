@@ -41,7 +41,7 @@ export function MessageList({
   if (isLoading) {
     return (
       <div className="flex flex-1 items-center justify-center">
-        <p className="text-sm text-muted-foreground">Cargando mensajes...</p>
+        <p className="text-[16px] text-muted-foreground">Cargando mensajes...</p>
       </div>
     );
   }
@@ -49,7 +49,7 @@ export function MessageList({
   if (messages.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-[16px] text-muted-foreground">
           No hay mensajes en esta conversación
         </p>
       </div>
@@ -84,7 +84,7 @@ export function MessageList({
             <div key={dateKey} className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <div className="h-px flex-1 bg-border" />
-                <span className="text-xs text-muted-foreground">{label}</span>
+                <span className="text-[16px] text-muted-foreground">{label}</span>
                 <div className="h-px flex-1 bg-border" />
               </div>
               <div className="flex flex-col gap-2">

@@ -95,7 +95,7 @@ export function AISuggestionPanel({
   return (
     <div className="flex flex-col gap-2">
       <div className="rounded-2xl rounded-tr-sm border border-[#BEFF50] bg-white px-4 py-3 shadow-sm">
-        <p className="whitespace-pre-wrap text-[15px] text-foreground">
+        <p className="whitespace-pre-wrap text-[16px] text-foreground">
           {suggestedText}
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
@@ -105,7 +105,7 @@ export function AISuggestionPanel({
             onClick={onEdit}
             disabled={isDisabled}
             aria-label="Editar"
-            className="h-9 gap-1.5 rounded-full border-border px-4 text-sm font-normal"
+            className="h-9 gap-1.5 rounded-full border-border px-4 text-[16px] font-normal"
           >
             <Pencil className="h-4 w-4" />
             Editar
@@ -126,7 +126,7 @@ export function AISuggestionPanel({
             onClick={handleSend}
             disabled={isDisabled || !suggestedText.trim()}
             aria-label="Enviar"
-            className="h-9 gap-1.5 rounded-full bg-black px-4 text-sm text-white hover:bg-black/90"
+            className="h-9 gap-1.5 rounded-full bg-black px-4 text-[16px] text-white hover:bg-black/90"
           >
             <Send className="h-4 w-4" />
             Enviar

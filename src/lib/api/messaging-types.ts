@@ -22,6 +22,8 @@ export interface ConversationMeta {
   rating?: number;
   businessName?: string;
   duration?: number;
+  /** Para llamadas: si la llamada fue transferida */
+  transferred?: boolean;
 }
 
 export interface Conversation {

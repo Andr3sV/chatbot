@@ -461,6 +461,7 @@ const seedConversations: Conversation[] = [
     meta: {
       duration: 45,
       businessName: "Barbería Luis",
+      transferred: true,
     },
   },
   {
@@ -475,6 +476,7 @@ const seedConversations: Conversation[] = [
     meta: {
       duration: 25,
       businessName: "Barbería Luis",
+      transferred: false,
     },
   },
   {
@@ -489,6 +491,7 @@ const seedConversations: Conversation[] = [
     meta: {
       duration: 35,
       businessName: "Barbería Luis",
+      transferred: true,
     },
   },
 ];

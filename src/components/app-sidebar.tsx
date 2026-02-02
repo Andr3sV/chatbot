@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -35,6 +36,52 @@ const CHANNEL_ICONS: Record<
   llamadas: { Icon: Phone, className: "text-blue-500" },
 };
 
+type ConversationFilterValue =
+  | "all"
+  | "pendientes"
+  | "requiere_humano"
+  | "respondidos"
+  | "transferidas"
+  | "sin_transferir";
+
+const WHATSAPP_FILTER_TAGS: { value: ConversationFilterValue; label: string }[] =
+  [
+    { value: "all", label: "Todos" },
+    { value: "pendientes", label: "Pendientes" },
+    { value: "requiere_humano", label: "Requiere humano" },
+    { value: "respondidos", label: "Respondidos" },
+  ];
+
+const INSTAGRAM_GOOGLE_FILTER_TAGS: {
+  value: ConversationFilterValue;
+  label: string;
+}[] = [
+  { value: "all", label: "Todos" },
+  { value: "pendientes", label: "Pendientes" },
+  { value: "respondidos", label: "Respondidos" },
+];
+
+const LLAMADAS_FILTER_TAGS: { value: ConversationFilterValue; label: string }[] =
+  [
+    { value: "all", label: "Todos" },
+    { value: "transferidas", label: "Transferidas" },
+    { value: "sin_transferir", label: "Sin transferir" },
+  ];
+
+function getFilterTags(channel: Channel | "all") {
+  switch (channel) {
+    case "whatsapp":
+      return WHATSAPP_FILTER_TAGS;
+    case "instagram":
+    case "google":
+      return INSTAGRAM_GOOGLE_FILTER_TAGS;
+    case "llamadas":
+      return LLAMADAS_FILTER_TAGS;
+    default:
+      return [];
+  }
+}
+
 function getInitials(phone: string, name?: string) {
   if (name) {
     return name
@@ -48,15 +95,55 @@ function getInitials(phone: string, name?: string) {
   return digits || "?";
 }
 
+function matchesFilter(
+  conv: { unreadCount: number; hasPendingApproval?: boolean; lastMessage?: { status: string }; meta?: { transferred?: boolean }; channel: Channel },
+  filter: ConversationFilterValue,
+  channel: Channel
+): boolean {
+  if (filter === "all") return true;
+
+  const hasPendingApproval =
+    conv.hasPendingApproval ?? conv.lastMessage?.status === "pending_approval";
+  const isPendiente = conv.unreadCount > 0;
+  const isRespondido = !isPendiente && !hasPendingApproval;
+
+  if (channel === "llamadas") {
+    if (filter === "transferidas") return conv.meta?.transferred === true;
+    if (filter === "sin_transferir")
+      return conv.meta?.transferred === false || conv.meta?.transferred == null;
+    return true;
+  }
+
+  if (filter === "pendientes") return isPendiente;
+  if (filter === "requiere_humano") return hasPendingApproval;
+  if (filter === "respondidos") return isRespondido;
+  return true;
+}
+
 export function AppSidebar() {
   const pathname = usePathname();
   const { selectedChannel } = useChannel();
+  const [conversationFilter, setConversationFilter] =
+    useState<ConversationFilterValue>("all");
   const client = getMessagingClient();
+
+  useEffect(() => {
+    setConversationFilter("all");
+  }, [selectedChannel]);
 
   const { data: conversations = [], isLoading } = useQuery({
     queryKey: ["conversations", selectedChannel],
     queryFn: () => client.getConversations(selectedChannel),
   });
+
+  const filteredConversations =
+    selectedChannel !== "all"
+      ? conversations.filter((conv) =>
+          matchesFilter(conv, conversationFilter, selectedChannel)
+        )
+      : conversations;
+
+  const filterTags = getFilterTags(selectedChannel);
 
   return (
     <aside
@@ -87,17 +174,38 @@ export function AppSidebar() {
           <Settings className="h-7 w-7 md:h-4 md:w-4" />
         </Link>
       </div>
+      {selectedChannel !== "all" && filterTags.length > 0 && (
+        <div className="shrink-0 overflow-x-auto overflow-y-hidden px-3 pb-2">
+          <div className="flex gap-1.5">
+            {filterTags.map((tag) => (
+              <button
+                key={tag.value}
+                type="button"
+                onClick={() => setConversationFilter(tag.value)}
+                className={cn(
+                  "shrink-0 rounded-full px-3 py-1.5 text-[16px] font-medium transition-colors md:py-1",
+                  conversationFilter === tag.value
+                    ? "bg-black text-white"
+                    : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                )}
+              >
+                {tag.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <ScrollArea className="min-h-0 min-w-0 flex-1 overflow-hidden px-3 pt-2 pr-2">
           <div className="min-w-0 max-w-full space-y-1 pb-4 md:space-y-0.5">
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-[16px] text-muted-foreground">
                   Cargando conversaciones...
                 </p>
               </div>
             ) : (
-              conversations.map((conv) => {
+              filteredConversations.map((conv) => {
                 const isActive = pathname === `/chat/${conv.id}`;
                 const displayName = conv.contact.name ?? conv.contact.phone;
                 const lastMsg = conv.lastMessage;
@@ -120,7 +228,7 @@ export function AppSidebar() {
                   >
                     <div
                       className={cn(
-                        "relative shrink-0 rounded-full p-1",
+                        "relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-gray-200 md:h-14 md:w-14",
                         getAvatarColor(
                           conv.contact.name ?? conv.contact.phone ?? conv.id
                         ).frame
@@ -136,7 +244,7 @@ export function AppSidebar() {
                         />
                         <AvatarFallback
                           className={cn(
-                            "text-sm font-medium md:text-xs",
+                            "text-[16px] font-medium",
                             getAvatarColor(
                               conv.contact.name ?? conv.contact.phone ?? conv.id
                             ).bg
@@ -168,10 +276,10 @@ export function AppSidebar() {
                     </div>
                     <div className="min-w-0 overflow-hidden">
                       <div className="flex flex-col gap-0.5">
-                        <span className="truncate text-base font-medium md:text-[15px]">
+                        <span className="truncate text-[16px] font-medium">
                           {displayName}
                         </span>
-                        <span className="truncate text-[14px] text-muted-foreground md:text-xs">
+                        <span className="truncate text-[16px] text-muted-foreground">
                           {lastPreview}
                           {lastPreview.length >= 35 ? "..." : ""}
                         </span>
@@ -179,7 +287,7 @@ export function AppSidebar() {
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-1">
                       {lastMsg && (
-                        <span className="text-[14px] text-muted-foreground md:text-xs">
+                        <span className="text-[16px] text-muted-foreground">
                           {format(lastMsg.timestamp, "HH:mm", { locale: es })}
                         </span>
                       )}
@@ -195,7 +303,7 @@ export function AppSidebar() {
                         )}
                         {conv.unreadCount > 0 && (
                           <Badge
-                            className="h-5 min-w-5 shrink-0 bg-[#BEFF50] px-1.5 text-[12px] text-black md:h-4 md:min-w-4 md:px-1 md:text-[10px]"
+                            className="h-5 min-w-5 shrink-0 bg-[#BEFF50] px-1.5 text-[16px] text-black md:h-4 md:min-w-4 md:px-1"
                           >
                             {conv.unreadCount}
                           </Badge>

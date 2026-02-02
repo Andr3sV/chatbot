@@ -124,15 +124,15 @@ export function MessageBubble({
             )}
             alt=""
           />
-          <AvatarFallback className="bg-pink-100 text-xs text-pink-700">
+          <AvatarFallback className="bg-pink-100 text-[16px] text-pink-700">
             {message.sender === "client" ? "U" : "B"}
           </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <p className="whitespace-pre-wrap break-words text-[15px] text-foreground">
+          <p className="whitespace-pre-wrap break-words text-[16px] text-foreground">
             {message.content}
           </p>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-[16px] text-muted-foreground">
             {format(message.timestamp, "h:mm a", { locale: es })}
           </span>
         </div>
@@ -154,10 +154,10 @@ export function MessageBubble({
             isClient ? "bg-muted/50" : "bg-[#DBFF95]"
           )}
         >
-          <p className="whitespace-pre-wrap break-words text-[15px] text-foreground">
+          <p className="whitespace-pre-wrap break-words text-[16px] text-foreground">
             {message.content}
           </p>
-          <span className="mt-1 block text-xs text-muted-foreground">
+          <span className="mt-1 block text-[16px] text-muted-foreground">
             {format(message.timestamp, "h:mm a", { locale: es })}
           </span>
         </div>
@@ -168,13 +168,13 @@ export function MessageBubble({
   if (channel === "llamadas") {
     return (
       <div className="flex w-full flex-col gap-0.5">
-        <span className="text-xs font-medium text-muted-foreground">
+        <span className="text-[16px] font-medium text-muted-foreground">
           {speakerLabel}:
         </span>
-        <p className="whitespace-pre-wrap break-words font-mono text-[15px] text-foreground">
+        <p className="whitespace-pre-wrap break-words font-mono text-[16px] text-foreground">
           {message.content}
         </p>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-[16px] text-muted-foreground">
           {format(message.timestamp, "h:mm:ss a", { locale: es })}
         </span>
       </div>
@@ -205,7 +205,7 @@ export function MessageBubble({
                 className="h-full w-full object-cover"
               />
             </div>
-            <span className="text-sm font-medium text-foreground">
+            <span className="text-[16px] font-medium text-foreground">
               He pensado en esta respuesta
             </span>
           </div>
@@ -222,7 +222,7 @@ export function MessageBubble({
                   : "rounded-tr-sm bg-[#DBFF95] text-foreground"
           )}
         >
-          <p className="whitespace-pre-wrap break-words text-[15px]">
+          <p className="whitespace-pre-wrap break-words text-[16px]">
             {(message.aiSuggestion ?? message.content).replace(
               /^\[Borrador\]\s*/,
               ""
@@ -239,7 +239,7 @@ export function MessageBubble({
                 }
                 disabled={isButtonsDisabled || !(message.aiSuggestion ?? message.content).trim()}
                 aria-label="Enviar"
-                className="h-10 w-full justify-center gap-1.5 rounded-lg bg-black text-sm text-white hover:bg-black/90"
+                className="h-10 w-full justify-center gap-1.5 rounded-lg bg-black text-[16px] text-white hover:bg-black/90"
               >
                 <Send className="h-4 w-4" />
                 Enviar
@@ -250,7 +250,7 @@ export function MessageBubble({
                 onClick={onEditSuggestion}
                 disabled={isButtonsDisabled}
                 aria-label="Editar"
-                className="h-10 w-full justify-center gap-1.5 rounded-lg border-border text-sm font-normal"
+                className="h-10 w-full justify-center gap-1.5 rounded-lg border-border text-[16px] font-normal"
               >
                 <Pencil className="h-4 w-4" />
                 Editar
@@ -273,11 +273,11 @@ export function MessageBubble({
           {!isClient && message.sender === "agent" && (
             <Bot className="h-3 w-3 text-muted-foreground" />
           )}
-          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5 text-[16px] text-muted-foreground">
             {isPending
               ? (
                 <>
-                  <span className="rounded-full bg-[#DBFF95] px-2 py-0.5 text-xs font-medium text-foreground">
+                  <span className="rounded-full bg-[#DBFF95] px-2 py-0.5 text-[16px] font-medium text-foreground">
                     Borrador
                   </span>
                   <span>• Justo ahora</span>
