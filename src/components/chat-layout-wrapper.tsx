@@ -10,7 +10,8 @@ export function ChatLayoutWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isChatOpen = pathname?.startsWith("/chat/");
+  const isSecondaryViewOpen =
+    pathname?.startsWith("/chat/") || pathname === "/settings";
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-background">
@@ -22,7 +23,7 @@ export function ChatLayoutWrapper({
           "border-r border-[hsl(var(--sidebar-border))]",
           "bg-[hsl(var(--sidebar-background))]",
           "z-10",
-          isChatOpen && "-translate-x-full md:translate-x-0"
+          isSecondaryViewOpen && "-translate-x-full md:translate-x-0"
         )}
       >
         <AppSidebar />
@@ -34,7 +35,7 @@ export function ChatLayoutWrapper({
           "absolute inset-0 flex flex-col overflow-hidden transition-transform duration-300 ease-out md:relative md:inset-auto md:flex-1",
           "border-l border-border bg-background",
           "z-20 md:z-auto",
-          isChatOpen
+          isSecondaryViewOpen
             ? "translate-x-0"
             : "translate-x-full md:translate-x-0 md:flex"
         )}

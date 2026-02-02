@@ -12,8 +12,11 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
+import type { Conversation } from "@/lib/api/messaging-types";
+import { getAvatarColor } from "@/lib/avatar-colors";
 import { getAvatarDataUri } from "@/lib/avatar-utils";
-import { ArrowLeft, TestTube2 } from "lucide-react";
+import { ArrowLeft, Phone, Star, TestTube2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { SimulationPanel } from "./SimulationPanel";
 
@@ -32,27 +35,35 @@ function getInitials(phone: string, name?: string) {
 
 interface ChatHeaderProps {
   conversationId: string;
+  conversation?: Conversation | null;
   hasPendingApproval?: boolean;
 }
 
 export function ChatHeader({
   conversationId,
+  conversation: conversationProp,
   hasPendingApproval = false,
 }: ChatHeaderProps) {
   const [simulatorOpen, setSimulatorOpen] = useState(false);
   const client = getMessagingClient();
 
-  const { data: conversations = [] } = useQuery({
-    queryKey: ["conversations"],
-    queryFn: () => client.getConversations(),
+  const { data: allConversations = [] } = useQuery({
+    queryKey: ["conversations", "all"],
+    queryFn: () => client.getConversations("all"),
+    enabled: !conversationProp,
   });
 
-  const conversation = conversations.find((c) => c.id === conversationId);
+  const conversation =
+    conversationProp ?? allConversations.find((c) => c.id === conversationId);
   const contact = conversation?.contact ?? {
     phone: "Desconocido",
     status: "offline" as const,
   };
   const displayName = contact.name ?? contact.phone;
+  const channel = conversation?.channel ?? "whatsapp";
+  const meta = conversation?.meta;
+  const showSimulator = channel === "whatsapp";
+  const avatarColor = getAvatarColor((contact.name ?? contact.phone) || "user");
 
   return (
     <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3">
@@ -64,18 +75,52 @@ export function ChatHeader({
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
-        <Avatar className="h-10 w-10 shrink-0">
-          <AvatarImage
-            src={getAvatarDataUri(contact.name ?? contact.phone, 80)}
-            alt={displayName}
-          />
-          <AvatarFallback className="bg-[#BEFF50] text-sm font-medium text-black">
-            {getInitials(contact.phone, contact.name)}
-          </AvatarFallback>
-        </Avatar>
-        <h1 className="min-w-0 truncate text-lg font-semibold">{displayName}</h1>
+        <div
+          className={cn(
+            "relative shrink-0 rounded-full p-1",
+            avatarColor.frame
+          )}
+        >
+          <Avatar className="h-10 w-10 shrink-0 overflow-hidden rounded-full">
+            <AvatarImage
+              src={getAvatarDataUri((contact.name ?? contact.phone) || "user", 80)}
+              alt={displayName}
+            />
+            <AvatarFallback
+              className={cn("text-sm font-medium", avatarColor.bg)}
+            >
+              {getInitials(contact.phone, contact.name)}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-lg font-semibold">{displayName}</h1>
+          {channel === "instagram" && meta?.postCaption && (
+            <p className="truncate text-xs text-muted-foreground">
+              {meta.postCaption}
+            </p>
+          )}
+          {channel === "google" && meta?.businessName && (
+            <p className="flex items-center gap-1 text-xs text-muted-foreground">
+              {meta.rating != null && (
+                <span className="flex items-center gap-0.5">
+                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                  {meta.rating}
+                </span>
+              )}
+              <span>• {meta.businessName}</span>
+            </p>
+          )}
+          {channel === "llamadas" && meta?.duration != null && (
+            <p className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Phone className="h-3 w-3" />
+              {Math.floor(meta.duration / 60)}:{String(meta.duration % 60).padStart(2, "0")} min
+            </p>
+          )}
+        </div>
       </div>
       <div className="flex items-center gap-1">
+        {showSimulator && (
         <Dialog open={simulatorOpen} onOpenChange={setSimulatorOpen}>
           <DialogTrigger asChild>
             <Button
@@ -97,6 +142,7 @@ export function ChatHeader({
             />
           </DialogContent>
         </Dialog>
+        )}
       </div>
     </header>
   );

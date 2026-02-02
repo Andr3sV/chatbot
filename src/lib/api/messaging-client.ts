@@ -1,11 +1,12 @@
 import type {
+  Channel,
   Conversation,
   Message,
   CopilotConfig,
 } from "./messaging-types";
 
 export interface IMessagingClient {
-  getConversations(): Promise<Conversation[]>;
+  getConversations(channel?: Channel | "all"): Promise<Conversation[]>;
   getMessages(conversationId: string): Promise<Message[]>;
   sendMessage(conversationId: string, content: string): Promise<Message>;
   approveAISuggestion(

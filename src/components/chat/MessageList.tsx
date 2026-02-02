@@ -4,13 +4,14 @@ import { useRef, useEffect } from "react";
 import { format, isToday, isYesterday } from "date-fns";
 import { es } from "date-fns/locale";
 import { MessageBubble } from "./MessageBubble";
-import type { Message } from "@/lib/api/messaging-types";
+import type { Channel, Message } from "@/lib/api/messaging-types";
 import { cn } from "@/lib/utils";
 
 interface MessageListProps {
   messages: Message[];
   isLoading: boolean;
   hasFloatingTopAlert?: boolean;
+  channel?: Channel;
 }
 
 function getDateLabel(date: Date): string {
@@ -23,6 +24,7 @@ export function MessageList({
   messages,
   isLoading,
   hasFloatingTopAlert = false,
+  channel = "whatsapp",
 }: MessageListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -83,7 +85,7 @@ export function MessageList({
               </div>
               <div className="flex flex-col gap-2">
                 {msgs.map((msg) => (
-                  <MessageBubble key={msg.id} message={msg} />
+                  <MessageBubble key={msg.id} message={msg} channel={channel} />
                 ))}
               </div>
             </div>

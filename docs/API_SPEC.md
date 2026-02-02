@@ -2,6 +2,8 @@
 
 Este documento describe el contrato de API que el servicio backend debe implementar para integrar la UI del chatbot. El frontend ya está preparado y consume estos endpoints vía `IMessagingClient` y WebSocket.
 
+**Nota sobre canales:** Los endpoints REST y el WebSocket descritos aquí son **solo para WhatsApp**. Los canales Instagram, Google y Llamadas usan datos mock en el frontend y no requieren backend ni llamadas HTTP.
+
 ---
 
 ## 1. Variables de entorno
@@ -74,20 +76,30 @@ Si no están definidas, el frontend usa el cliente mock y datos locales.
 ```json
 {
   "id": "string",
+  "channel": "whatsapp" | "instagram" | "google" | "llamadas",
   "contact": { /* Contact */ },
   "lastMessage": { /* Message */ } | null,
   "unreadCount": "number",
-  "hasPendingApproval": "boolean"
+  "hasPendingApproval": "boolean",
+  "meta": {
+    "postUrl": "string | null",
+    "postCaption": "string | null",
+    "rating": "number | null",
+    "businessName": "string | null",
+    "duration": "number | null"
+  }
 }
 ```
 
 | Campo | Tipo | Requerido | Descripción |
 |-------|------|-----------|-------------|
 | id | string | Sí | Identificador único de la conversación |
+| channel | string | Sí | Canal: whatsapp, instagram, google, llamadas |
 | contact | Contact | Sí | Datos del contacto |
 | lastMessage | Message | No | Último mensaje de la conversación |
 | unreadCount | number | Sí | Cantidad de mensajes no leídos |
 | hasPendingApproval | boolean | No | Si hay alguna sugerencia IA pendiente de aprobación |
+| meta | object | No | Datos específicos del canal (postCaption para Instagram, rating/businessName para Google, duration para Llamadas) |
 
 ---
 

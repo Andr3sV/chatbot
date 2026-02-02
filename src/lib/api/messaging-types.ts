@@ -1,3 +1,5 @@
+export type Channel = "whatsapp" | "instagram" | "google" | "llamadas";
+
 export interface Contact {
   phone: string;
   name?: string;
@@ -14,12 +16,22 @@ export interface Message {
   aiSuggestion?: string;
 }
 
+export interface ConversationMeta {
+  postUrl?: string;
+  postCaption?: string;
+  rating?: number;
+  businessName?: string;
+  duration?: number;
+}
+
 export interface Conversation {
   id: string;
+  channel: Channel;
   contact: Contact;
   lastMessage?: Message;
   unreadCount: number;
   hasPendingApproval?: boolean;
+  meta?: ConversationMeta;
 }
 
 export interface CopilotConfig {

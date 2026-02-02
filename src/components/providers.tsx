@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
+import { ChannelProvider } from "@/contexts/channel-context";
 import { WebSocketSubscriber } from "./websocket-subscriber";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -18,8 +19,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <WebSocketSubscriber />
+      <ChannelProvider>
+        {children}
+        <WebSocketSubscriber />
+      </ChannelProvider>
     </QueryClientProvider>
   );
 }

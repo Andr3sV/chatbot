@@ -1,6 +1,8 @@
 import type { IMessagingClient } from "./messaging-client";
 import type {
+  Channel,
   Conversation,
+  ConversationMeta,
   Message,
   CopilotConfig,
 } from "./messaging-types";
@@ -145,16 +147,197 @@ function createSeedMessages(): Record<string, Message[]> {
     },
   ];
 
+  const insta1Messages: Message[] = [
+    {
+      id: "mi1",
+      conversationId: "insta1",
+      content: "¡Qué bonito! ¿Cuánto cuesta el corte?",
+      sender: "client",
+      timestamp: ten45,
+      status: "delivered",
+    },
+    {
+      id: "mi2",
+      conversationId: "insta1",
+      content: "Gracias! El corte está en $250. ¿Te gustaría agendar?",
+      sender: "agent",
+      timestamp: ten46,
+      status: "sent",
+    },
+  ];
+
+  const insta2Messages: Message[] = [
+    {
+      id: "mi3",
+      conversationId: "insta2",
+      content: "¿Tienen servicio a domicilio?",
+      sender: "client",
+      timestamp: new Date(ten45.getTime() - 7200000),
+      status: "delivered",
+    },
+  ];
+
+  const insta3Messages: Message[] = [
+    {
+      id: "mi4",
+      conversationId: "insta3",
+      content: "Hermoso trabajo, los sigo desde hace tiempo",
+      sender: "client",
+      timestamp: new Date(ten45.getTime() - 86400000),
+      status: "delivered",
+    },
+    {
+      id: "mi5",
+      conversationId: "insta3",
+      content: "¡Muchas gracias por tu apoyo! Nos encanta tenerte.",
+      sender: "agent",
+      timestamp: new Date(ten46.getTime() - 86400000),
+      status: "sent",
+    },
+  ];
+
+  const google1Messages: Message[] = [
+    {
+      id: "mg1",
+      conversationId: "google1",
+      content: "Excelente servicio, muy recomendado. 5 estrellas.",
+      sender: "client",
+      timestamp: ten45,
+      status: "delivered",
+    },
+    {
+      id: "mg2",
+      conversationId: "google1",
+      content: "Gracias por tu reseña! Nos alegra que hayas tenido una buena experiencia.",
+      sender: "agent",
+      timestamp: ten46,
+      status: "sent",
+    },
+  ];
+
+  const google2Messages: Message[] = [
+    {
+      id: "mg3",
+      conversationId: "google2",
+      content: "Buen lugar pero la espera fue larga. 3 estrellas.",
+      sender: "client",
+      timestamp: new Date(ten45.getTime() - 3600000),
+      status: "delivered",
+    },
+  ];
+
+  const google3Messages: Message[] = [
+    {
+      id: "mg4",
+      conversationId: "google3",
+      content: "Los mejores cortes de la zona. Siempre puntuales.",
+      sender: "client",
+      timestamp: new Date(ten45.getTime() - 172800000),
+      status: "delivered",
+    },
+  ];
+
+  const call1Messages: Message[] = [
+    {
+      id: "mc1",
+      conversationId: "call1",
+      content: "Buenos días, Barbería Luis, ¿en qué puedo ayudarle?",
+      sender: "agent",
+      timestamp: ten45,
+      status: "delivered",
+    },
+    {
+      id: "mc2",
+      conversationId: "call1",
+      content: "Hola, quisiera agendar una cita para mañana por la tarde.",
+      sender: "client",
+      timestamp: new Date(ten45.getTime() + 5000),
+      status: "delivered",
+    },
+    {
+      id: "mc3",
+      conversationId: "call1",
+      content: "Claro, tenemos disponibilidad a las 4pm y 5pm. ¿Cuál prefiere?",
+      sender: "agent",
+      timestamp: new Date(ten45.getTime() + 12000),
+      status: "delivered",
+    },
+    {
+      id: "mc4",
+      conversationId: "call1",
+      content: "Las 4pm perfecto, gracias.",
+      sender: "client",
+      timestamp: new Date(ten45.getTime() + 18000),
+      status: "delivered",
+    },
+  ];
+
+  const call2Messages: Message[] = [
+    {
+      id: "mc5",
+      conversationId: "call2",
+      content: "Barbería Luis, buenas tardes.",
+      sender: "agent",
+      timestamp: new Date(ten45.getTime() - 3600000),
+      status: "delivered",
+    },
+    {
+      id: "mc6",
+      conversationId: "call2",
+      content: "Hola, ¿cuál es el horario de atención?",
+      sender: "client",
+      timestamp: new Date(ten45.getTime() - 3600000 + 3000),
+      status: "delivered",
+    },
+    {
+      id: "mc7",
+      conversationId: "call2",
+      content: "Lunes a sábado de 9am a 7pm. Domingos cerrado.",
+      sender: "agent",
+      timestamp: new Date(ten45.getTime() - 3600000 + 8000),
+      status: "delivered",
+    },
+  ];
+
+  const call3Messages: Message[] = [
+    {
+      id: "mc8",
+      conversationId: "call3",
+      content: "Hola, llamo por el corte que reservé a nombre de Roberto.",
+      sender: "client",
+      timestamp: new Date(ten45.getTime() - 7200000),
+      status: "delivered",
+    },
+    {
+      id: "mc9",
+      conversationId: "call3",
+      content: "Déjeme verificar... Sí, tiene cita hoy a las 3pm. ¿Necesita cambiar algo?",
+      sender: "agent",
+      timestamp: new Date(ten45.getTime() - 7200000 + 5000),
+      status: "delivered",
+    },
+  ];
+
   return {
     conv1: conv1Messages,
     conv2: conv2Messages,
     conv3: conv3Messages,
+    insta1: insta1Messages,
+    insta2: insta2Messages,
+    insta3: insta3Messages,
+    google1: google1Messages,
+    google2: google2Messages,
+    google3: google3Messages,
+    call1: call1Messages,
+    call2: call2Messages,
+    call3: call3Messages,
   };
 }
 
 const seedConversations: Conversation[] = [
   {
     id: "conv1",
+    channel: "whatsapp",
     contact: {
       phone: "+52 1 55 1234 5678",
       name: "Carlos",
@@ -164,6 +347,7 @@ const seedConversations: Conversation[] = [
   },
   {
     id: "conv2",
+    channel: "whatsapp",
     contact: {
       phone: "+55 11 99999-9999",
       name: "María",
@@ -173,6 +357,7 @@ const seedConversations: Conversation[] = [
   },
   {
     id: "conv3",
+    channel: "whatsapp",
     contact: {
       phone: "+1 555-0199",
       name: "Pedro",
@@ -180,22 +365,161 @@ const seedConversations: Conversation[] = [
     },
     unreadCount: 0,
   },
+  {
+    id: "insta1",
+    channel: "instagram",
+    contact: {
+      phone: "",
+      name: "@maria_foto",
+      status: "offline",
+    },
+    unreadCount: 0,
+    meta: {
+      postCaption: "Nuevo corte de la semana 🔥 #barberia #estilo",
+      postUrl: "https://instagram.com/p/example",
+    },
+  },
+  {
+    id: "insta2",
+    channel: "instagram",
+    contact: {
+      phone: "",
+      name: "@carlos_design",
+      status: "offline",
+    },
+    unreadCount: 1,
+    meta: {
+      postCaption: "Promo especial este mes",
+      postUrl: "https://instagram.com/p/example2",
+    },
+  },
+  {
+    id: "insta3",
+    channel: "instagram",
+    contact: {
+      phone: "",
+      name: "@laura_style",
+      status: "offline",
+    },
+    unreadCount: 0,
+    meta: {
+      postCaption: "Antes y después ✂️",
+      postUrl: "https://instagram.com/p/example3",
+    },
+  },
+  {
+    id: "google1",
+    channel: "google",
+    contact: {
+      phone: "",
+      name: "Ana García",
+      status: "offline",
+    },
+    unreadCount: 0,
+    meta: {
+      rating: 5,
+      businessName: "Barbería Luis",
+    },
+  },
+  {
+    id: "google2",
+    channel: "google",
+    contact: {
+      phone: "",
+      name: "Pedro Martínez",
+      status: "offline",
+    },
+    unreadCount: 1,
+    meta: {
+      rating: 3,
+      businessName: "Barbería Luis",
+    },
+  },
+  {
+    id: "google3",
+    channel: "google",
+    contact: {
+      phone: "",
+      name: "Luis Fernández",
+      status: "offline",
+    },
+    unreadCount: 0,
+    meta: {
+      rating: 5,
+      businessName: "Barbería Luis",
+    },
+  },
+  {
+    id: "call1",
+    channel: "llamadas",
+    contact: {
+      phone: "+52 1 55 1111 2222",
+      name: "Roberto",
+      status: "offline",
+    },
+    unreadCount: 0,
+    meta: {
+      duration: 45,
+      businessName: "Barbería Luis",
+    },
+  },
+  {
+    id: "call2",
+    channel: "llamadas",
+    contact: {
+      phone: "+52 1 55 3333 4444",
+      name: "Desconocido",
+      status: "offline",
+    },
+    unreadCount: 0,
+    meta: {
+      duration: 25,
+      businessName: "Barbería Luis",
+    },
+  },
+  {
+    id: "call3",
+    channel: "llamadas",
+    contact: {
+      phone: "+52 1 55 5555 6666",
+      name: "Roberto",
+      status: "offline",
+    },
+    unreadCount: 1,
+    meta: {
+      duration: 35,
+      businessName: "Barbería Luis",
+    },
+  },
 ];
 
 export function createMockMessagingClient(): IMessagingClient {
+  const seedMessages = createSeedMessages();
   let messages = loadMessages();
   const hasStored = Object.keys(messages).length > 0;
   if (!hasStored) {
-    messages = createSeedMessages();
+    messages = seedMessages;
+    saveMessages(messages);
+  } else {
+    for (const [convId, msgs] of Object.entries(seedMessages)) {
+      if (!messages[convId] || messages[convId].length === 0) {
+        messages[convId] = msgs;
+      }
+    }
     saveMessages(messages);
   }
   _messages = messages;
 
   return {
-    async getConversations(): Promise<Conversation[]> {
+    async getConversations(
+      channel?: Channel | "all"
+    ): Promise<Conversation[]> {
       await delay(200);
       const currentMessages = _messages ?? loadMessages();
-      const convs = seedConversations.map((c) => ({ ...c }));
+      let convs = seedConversations.map((c) => ({ ...c }));
+      if (channel && channel !== "all") {
+        convs = convs.filter((c) => c.channel === channel);
+      }
       for (const conv of convs) {
         const msgs = currentMessages[conv.id] ?? [];
         const last = msgs[msgs.length - 1];

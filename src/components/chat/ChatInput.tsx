@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
-import type { Message } from "@/lib/api/messaging-types";
+import type { Channel, Message } from "@/lib/api/messaging-types";
 import { Send, Smile } from "lucide-react";
 
 const EmojiPicker = dynamic(
@@ -21,12 +21,24 @@ const EmojiPicker = dynamic(
 
 interface ChatInputProps {
   conversationId: string;
+  channel?: Channel;
 }
 
 const MIN_HEIGHT = 24;
 const MAX_HEIGHT = 150;
 
-export function ChatInput({ conversationId }: ChatInputProps) {
+function getPlaceholder(channel?: Channel): string {
+  switch (channel) {
+    case "instagram":
+      return "Responder comentario...";
+    case "google":
+      return "Responder al review...";
+    default:
+      return "Escribe un mensaje...";
+  }
+}
+
+export function ChatInput({ conversationId, channel = "whatsapp" }: ChatInputProps) {
   const [text, setText] = useState("");
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -129,7 +141,7 @@ export function ChatInput({ conversationId }: ChatInputProps) {
               (e.target as HTMLTextAreaElement).form?.requestSubmit();
             }
           }}
-          placeholder="Escribe un mensaje..."
+          placeholder={getPlaceholder(channel)}
           rows={1}
           className="min-h-[24px] max-h-[150px] min-w-0 flex-1 resize-none overflow-y-auto overflow-x-hidden border-0 bg-transparent py-2 text-sm shadow-none focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={sendMutation.isPending}
