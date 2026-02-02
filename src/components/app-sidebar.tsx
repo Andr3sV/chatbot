@@ -231,17 +231,20 @@ export function AppSidebar() {
                   >
                     <div
                       className={cn(
-                        "relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-gray-200 md:h-14 md:w-14",
+                        "relative flex h-16 w-16 shrink-0 rounded-full md:h-14 md:w-14",
                         getAvatarColor(
                           conv.contact.name ?? conv.contact.phone ?? conv.id
                         ).frame
                       )}
                     >
-                      <Avatar className="h-12 w-12 shrink-0 overflow-hidden rounded-full md:h-10 md:w-10">
+                      <Avatar className="h-full w-full shrink-0 overflow-hidden rounded-full">
                         <AvatarImage
                           src={getAvatarDataUri(
                             conv.contact.name ?? conv.contact.phone,
-                            88
+                            88,
+                            getAvatarColor(
+                              conv.contact.name ?? conv.contact.phone ?? conv.id
+                            ).hex
                           )}
                           alt={displayName}
                         />
@@ -262,7 +265,7 @@ export function AppSidebar() {
                         return (
                           <span
                             className={cn(
-                              "absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-white shadow-sm md:h-5 md:w-5",
+                              "absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-white shadow-sm md:h-5 md:w-5",
                               "ring-1 ring-border"
                             )}
                             aria-hidden

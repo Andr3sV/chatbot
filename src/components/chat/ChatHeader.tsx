@@ -77,13 +77,17 @@ export function ChatHeader({
         </Link>
         <div
           className={cn(
-            "relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-gray-200 md:h-11 md:w-11",
+            "relative flex h-14 w-14 shrink-0 overflow-hidden rounded-full md:h-12 md:w-12",
             avatarColor.frame
           )}
         >
-          <Avatar className="h-10 w-10 shrink-0 overflow-hidden rounded-full md:h-9 md:w-9">
+          <Avatar className="h-full w-full shrink-0 overflow-hidden rounded-full">
             <AvatarImage
-              src={getAvatarDataUri((contact.name ?? contact.phone) || "user", 80)}
+              src={getAvatarDataUri(
+                (contact.name ?? contact.phone) || "user",
+                80,
+                avatarColor.hex
+              )}
               alt={displayName}
             />
             <AvatarFallback
