@@ -72,7 +72,7 @@ export function MessageList({
     <div
       ref={scrollRef}
       className={cn(
-        "flex-1 overflow-y-auto pb-44",
+        "scrollbar-hide flex-1 overflow-y-auto pb-44",
         hasFloatingTopAlert && "pt-20"
       )}
     >

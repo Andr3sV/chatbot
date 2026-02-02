@@ -149,7 +149,7 @@ export function AppSidebar() {
     <aside
       className={cn(
         "flex h-screen w-full shrink-0 flex-col pt-3 md:w-72 md:pt-3",
-        "border-r border-[hsl(var(--sidebar-border))]",
+        "border-r border-[hsl(var(--sidebar-border))] md:border-r-[0.5px]",
         "bg-[hsl(var(--sidebar-background))]"
       )}
     >
@@ -196,7 +196,10 @@ export function AppSidebar() {
         </div>
       )}
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        <ScrollArea className="min-h-0 min-w-0 flex-1 overflow-hidden px-3 pt-2 pr-2">
+        <ScrollArea
+          hideScrollbar
+          className="min-h-0 min-w-0 flex-1 overflow-hidden px-3 pt-2 pr-2"
+        >
           <div className="min-w-0 max-w-full space-y-1 pb-4 md:space-y-0.5">
             {isLoading ? (
               <div className="flex items-center justify-center py-12">

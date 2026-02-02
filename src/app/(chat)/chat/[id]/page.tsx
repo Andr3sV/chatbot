@@ -44,7 +44,7 @@ export default function ChatPage() {
   }, [showAISuggestion]);
 
   return (
-    <div className="relative flex h-full flex-col border-l border-border chat-background-pattern">
+    <div className="relative flex h-full flex-col chat-background-pattern">
       <ChatHeader
         conversationId={id}
         conversation={conversation}
