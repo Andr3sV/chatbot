@@ -20,13 +20,15 @@ const ScrollArea = React.forwardRef<
   >
     <ScrollAreaPrimitive.Viewport
       className={cn(
-        "h-full w-full min-w-0 overflow-x-hidden rounded-[inherit]",
+        "h-full w-full min-w-0 overflow-x-hidden overflow-y-auto rounded-[inherit]",
         hideScrollbar && "scrollbar-hide"
       )}
     >
       {children}
     </ScrollAreaPrimitive.Viewport>
-    {!hideScrollbar && <ScrollBar />}
+    <ScrollBar
+      className={hideScrollbar ? "opacity-0 pointer-events-none" : undefined}
+    />
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
 ));

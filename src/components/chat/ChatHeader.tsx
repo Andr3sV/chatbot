@@ -66,8 +66,8 @@ export function ChatHeader({
   const avatarColor = getAvatarColor((contact.name ?? contact.phone) || "user");
 
   return (
-    <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3">
-      <div className="flex min-w-0 flex-1 items-center gap-3">
+    <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3 md:py-2.5">
+      <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-2.5">
         <Link
           href="/"
           className="shrink-0 rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
@@ -77,11 +77,11 @@ export function ChatHeader({
         </Link>
         <div
           className={cn(
-            "relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-gray-200",
+            "relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-gray-200 md:h-11 md:w-11",
             avatarColor.frame
           )}
         >
-          <Avatar className="h-10 w-10 shrink-0 overflow-hidden rounded-full">
+          <Avatar className="h-10 w-10 shrink-0 overflow-hidden rounded-full md:h-9 md:w-9">
             <AvatarImage
               src={getAvatarDataUri((contact.name ?? contact.phone) || "user", 80)}
               alt={displayName}
