@@ -12,6 +12,8 @@ interface MessageListProps {
   isLoading: boolean;
   hasFloatingTopAlert?: boolean;
   channel?: Channel;
+  conversationId?: string;
+  onEditSuggestion?: () => void;
 }
 
 function getDateLabel(date: Date): string {
@@ -25,6 +27,8 @@ export function MessageList({
   isLoading,
   hasFloatingTopAlert = false,
   channel = "whatsapp",
+  conversationId,
+  onEditSuggestion,
 }: MessageListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -85,7 +89,17 @@ export function MessageList({
               </div>
               <div className="flex flex-col gap-2">
                 {msgs.map((msg) => (
-                  <MessageBubble key={msg.id} message={msg} channel={channel} />
+                  <MessageBubble
+                    key={msg.id}
+                    message={msg}
+                    channel={channel}
+                    conversationId={conversationId}
+                    onEditSuggestion={
+                      msg.status === "pending_approval"
+                        ? onEditSuggestion
+                        : undefined
+                    }
+                  />
                 ))}
               </div>
             </div>

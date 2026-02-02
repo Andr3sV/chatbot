@@ -3,10 +3,13 @@
 import Image from "next/image";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Bot, Loader2 } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Bot, Loader2, Pencil, Send, X } from "lucide-react";
 import type { Channel, Message } from "@/lib/api/messaging-types";
 import { getAvatarDataUri } from "@/lib/avatar-utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { getMessagingClient } from "@/lib/api/mock-messaging";
 import { cn } from "@/lib/utils";
 
 const AI_AVATAR_SRC = "/sophi.png";
@@ -14,6 +17,8 @@ const AI_AVATAR_SRC = "/sophi.png";
 interface MessageBubbleProps {
   message: Message;
   channel?: Channel;
+  conversationId?: string;
+  onEditSuggestion?: () => void;
 }
 
 function getInitials(phone: string, name?: string) {
@@ -29,10 +34,76 @@ function getInitials(phone: string, name?: string) {
   return digits || "?";
 }
 
-export function MessageBubble({ message, channel = "whatsapp" }: MessageBubbleProps) {
+export function MessageBubble({
+  message,
+  channel = "whatsapp",
+  conversationId,
+  onEditSuggestion,
+}: MessageBubbleProps) {
   const isClient = message.sender === "client";
   const isPending = message.status === "pending_approval";
   const isSending = message.status === "sending";
+  const queryClient = useQueryClient();
+  const client = getMessagingClient();
+
+  const approveMutation = useMutation({
+    mutationFn: (content?: string) =>
+      client.approveAISuggestion(conversationId!, message.id, content),
+    onMutate: async (content) => {
+      await queryClient.cancelQueries({ queryKey: ["messages", conversationId] });
+      const previous = queryClient.getQueryData<Message[]>(["messages", conversationId]);
+      const optimisticUpdate: Message = {
+        id: message.id,
+        conversationId: message.conversationId,
+        content: content ?? message.aiSuggestion ?? message.content,
+        sender: "agent",
+        timestamp: new Date(),
+        status: "sent",
+      };
+      queryClient.setQueryData<Message[]>(["messages", conversationId], (old) =>
+        old?.map((m) => (m.id === message.id ? optimisticUpdate : m)) ?? [optimisticUpdate]
+      );
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      return { previous };
+    },
+    onSuccess: (serverMessage) => {
+      queryClient.setQueryData<Message[]>(["messages", conversationId], (old) =>
+        old?.map((m) => (m.id === message.id ? serverMessage : m)) ?? [serverMessage]
+      );
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+    onError: (_err, _content, context) => {
+      if (context?.previous != null) {
+        queryClient.setQueryData(["messages", conversationId], context.previous);
+      }
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+  });
+
+  const discardMutation = useMutation({
+    mutationFn: () => client.discardAISuggestion(conversationId!, message.id),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["messages", conversationId] });
+      const previous = queryClient.getQueryData<Message[]>(["messages", conversationId]);
+      queryClient.setQueryData<Message[]>(["messages", conversationId], (old) =>
+        old?.filter((m) => m.id !== message.id) ?? []
+      );
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      return { previous };
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+    onError: (_err, _content, context) => {
+      if (context?.previous != null) {
+        queryClient.setQueryData(["messages", conversationId], context.previous);
+      }
+      void queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+  });
+
+  const isButtonsDisabled = approveMutation.isPending || discardMutation.isPending;
   const speakerLabel =
     channel === "llamadas"
       ? message.sender === "client"
@@ -58,7 +129,7 @@ export function MessageBubble({ message, channel = "whatsapp" }: MessageBubblePr
           </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <p className="whitespace-pre-wrap break-words text-sm text-foreground">
+          <p className="whitespace-pre-wrap break-words text-[15px] text-foreground">
             {message.content}
           </p>
           <span className="text-xs text-muted-foreground">
@@ -83,7 +154,7 @@ export function MessageBubble({ message, channel = "whatsapp" }: MessageBubblePr
             isClient ? "bg-muted/50" : "bg-[#DBFF95]"
           )}
         >
-          <p className="whitespace-pre-wrap break-words text-sm text-foreground">
+          <p className="whitespace-pre-wrap break-words text-[15px] text-foreground">
             {message.content}
           </p>
           <span className="mt-1 block text-xs text-muted-foreground">
@@ -100,7 +171,7 @@ export function MessageBubble({ message, channel = "whatsapp" }: MessageBubblePr
         <span className="text-xs font-medium text-muted-foreground">
           {speakerLabel}:
         </span>
-        <p className="whitespace-pre-wrap break-words font-mono text-sm text-foreground">
+        <p className="whitespace-pre-wrap break-words font-mono text-[15px] text-foreground">
           {message.content}
         </p>
         <span className="text-xs text-muted-foreground">
@@ -151,9 +222,52 @@ export function MessageBubble({ message, channel = "whatsapp" }: MessageBubblePr
                   : "rounded-tr-sm bg-[#DBFF95] text-foreground"
           )}
         >
-          <p className="whitespace-pre-wrap break-words text-sm">
-            {message.content}
+          <p className="whitespace-pre-wrap break-words text-[15px]">
+            {(message.aiSuggestion ?? message.content).replace(
+              /^\[Borrador\]\s*/,
+              ""
+            )}
           </p>
+          {isPending && conversationId && onEditSuggestion && (
+            <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
+              <Button
+                size="sm"
+                onClick={() =>
+                  approveMutation.mutate(
+                    message.aiSuggestion ?? message.content
+                  )
+                }
+                disabled={isButtonsDisabled || !(message.aiSuggestion ?? message.content).trim()}
+                aria-label="Enviar"
+                className="h-10 w-full justify-center gap-1.5 rounded-lg bg-black text-sm text-white hover:bg-black/90"
+              >
+                <Send className="h-4 w-4" />
+                Enviar
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onEditSuggestion}
+                disabled={isButtonsDisabled}
+                aria-label="Editar"
+                className="h-10 w-full justify-center gap-1.5 rounded-lg border-border text-sm font-normal"
+              >
+                <Pencil className="h-4 w-4" />
+                Editar
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => discardMutation.mutate()}
+                disabled={isButtonsDisabled}
+                aria-label="Cancelar"
+                className="h-10 w-full justify-center gap-1.5 rounded-lg border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+              >
+                <X className="h-4 w-4" />
+                Cancelar
+              </Button>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-1.5">
           {!isClient && message.sender === "agent" && (

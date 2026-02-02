@@ -1,48 +1,24 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import dynamic from "next/dynamic";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
 import type { Message } from "@/lib/api/messaging-types";
-import { Pencil, Send, Smile, Trash2 } from "lucide-react";
-
-const EmojiPicker = dynamic(
-  () => import("emoji-picker-react").then((mod) => mod.default),
-  { ssr: false }
-);
+import { Pencil, Send, X } from "lucide-react";
 
 interface AISuggestionPanelProps {
   conversationId: string;
   messageId: string;
   suggestedText: string;
+  onEdit: () => void;
 }
 
 export function AISuggestionPanel({
   conversationId,
   messageId,
   suggestedText,
+  onEdit,
 }: AISuggestionPanelProps) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedText, setEditedText] = useState(suggestedText);
-  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    if (!isEditing) return;
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = "0px";
-    const newHeight = Math.min(Math.max(el.scrollHeight, 40), 150);
-    el.style.height = `${newHeight}px`;
-  }, [editedText, isEditing]);
   const queryClient = useQueryClient();
   const client = getMessagingClient();
 
@@ -104,9 +80,8 @@ export function AISuggestionPanel({
   });
 
   const handleSend = () => {
-    const textToSend = isEditing ? editedText : suggestedText;
-    if (textToSend.trim()) {
-      approveMutation.mutate(textToSend);
+    if (suggestedText.trim()) {
+      approveMutation.mutate(suggestedText);
     }
   };
 
@@ -114,92 +89,47 @@ export function AISuggestionPanel({
     discardMutation.mutate();
   };
 
-  const handleEmojiClick = (emojiData: { emoji: string }) => {
-    if (!isEditing) {
-      setEditedText(suggestedText + emojiData.emoji);
-      setIsEditing(true);
-    } else {
-      setEditedText((prev) => prev + emojiData.emoji);
-    }
-  };
-
   const isDisabled =
     approveMutation.isPending || discardMutation.isPending;
 
   return (
-    <div>
-      <div className="flex items-center gap-2 rounded-3xl border border-border bg-white px-4 py-2 shadow-lg">
-        <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              disabled={isDisabled}
-              aria-label="Elegir emoji"
-              className="h-9 w-9 shrink-0 rounded-full text-muted-foreground hover:text-foreground"
-            >
-              <Smile className="h-5 w-5" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            side="top"
-            className="w-auto border-0 p-0"
-          >
-            <EmojiPicker
-              onEmojiClick={handleEmojiClick}
-              searchPlaceholder="Buscar emoji..."
-            />
-          </PopoverContent>
-        </Popover>
-        <div className="flex min-h-10 min-w-0 flex-1 items-center">
-          {isEditing ? (
-            <Textarea
-              ref={textareaRef}
-              value={editedText}
-              onChange={(e) => setEditedText(e.target.value)}
-              className="min-h-[40px] max-h-[150px] min-w-0 flex-1 resize-none overflow-y-auto overflow-x-hidden border-0 bg-transparent text-sm shadow-none focus-visible:ring-0"
-              placeholder="Edita el mensaje..."
-            />
-          ) : (
-            <p className="flex-1 whitespace-pre-wrap text-sm text-foreground">
-              {suggestedText}
-            </p>
-          )}
-        </div>
-        <div className="flex shrink-0 items-center gap-0.5">
+    <div className="flex flex-col gap-2">
+      <div className="rounded-2xl rounded-tr-sm border border-[#BEFF50] bg-white px-4 py-3 shadow-sm">
+        <p className="whitespace-pre-wrap text-[15px] text-foreground">
+          {suggestedText}
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
           <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              setIsEditing(!isEditing);
-              if (isEditing) setEditedText(suggestedText);
-            }}
+            variant="outline"
+            size="sm"
+            onClick={onEdit}
             disabled={isDisabled}
-            aria-label={isEditing ? "Ver original" : "Editar"}
-            className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground"
+            aria-label="Editar"
+            className="h-9 gap-1.5 rounded-full border-border px-4 text-sm font-normal"
           >
             <Pencil className="h-4 w-4" />
+            Editar
           </Button>
           <Button
-            variant="ghost"
-            size="icon"
+            variant="outline"
+            size="sm"
             onClick={handleDiscard}
             disabled={isDisabled}
-            aria-label="Descartar sugerencia"
-            className="h-9 w-9 rounded-full text-red-400 hover:text-red-600"
+            aria-label="Cancelar"
+            className="h-9 gap-1.5 rounded-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
           >
-            <Trash2 className="h-4 w-4" />
+            <X className="h-4 w-4" />
+            Cancelar
           </Button>
           <Button
-            size="icon"
+            size="sm"
             onClick={handleSend}
-            disabled={isDisabled || (isEditing && !editedText.trim())}
+            disabled={isDisabled || !suggestedText.trim()}
             aria-label="Enviar"
-            className="h-9 w-9 shrink-0 rounded-full bg-black text-white hover:bg-black/90"
+            className="h-9 gap-1.5 rounded-full bg-black px-4 text-sm text-white hover:bg-black/90"
           >
             <Send className="h-4 w-4" />
+            Enviar
           </Button>
         </div>
       </div>
