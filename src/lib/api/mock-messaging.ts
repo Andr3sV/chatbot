@@ -13,12 +13,20 @@ const MESSAGES_STORAGE_KEY = "chatbot_mock_messages";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const DEFAULT_SERVICES = [
+  { id: "s1", name: "Corte cabello", durationMinutes: 30, priceMin: 10, priceMax: undefined },
+  { id: "s2", name: "Corte de barba", durationMinutes: undefined, priceMin: 5, priceMax: undefined },
+  { id: "s3", name: "Rapado", durationMinutes: 15, priceMin: 5, priceMax: 15 },
+];
+
 function loadConfig(): CopilotConfig {
   if (typeof window === "undefined") {
     return {
       blacklist: [],
       waitTimeMinutes: 5,
       enableAIForNewContacts: true,
+      communicationStyle: "profesional",
+      services: DEFAULT_SERVICES,
     };
   }
   try {
@@ -29,6 +37,8 @@ function loadConfig(): CopilotConfig {
         blacklist: parsed.blacklist ?? [],
         waitTimeMinutes: parsed.waitTimeMinutes ?? 5,
         enableAIForNewContacts: parsed.enableAIForNewContacts ?? true,
+        communicationStyle: parsed.communicationStyle ?? "profesional",
+        services: Array.isArray(parsed.services) ? parsed.services : DEFAULT_SERVICES,
       };
     }
   } catch {
@@ -38,6 +48,8 @@ function loadConfig(): CopilotConfig {
     blacklist: [],
     waitTimeMinutes: 5,
     enableAIForNewContacts: true,
+    communicationStyle: "profesional",
+    services: DEFAULT_SERVICES,
   };
 }
 

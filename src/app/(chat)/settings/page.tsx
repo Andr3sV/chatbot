@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { BlacklistSection } from "@/components/settings/BlacklistSection";
 import { WaitTimeSection } from "@/components/settings/WaitTimeSection";
 import { EnableAIToggle } from "@/components/settings/EnableAIToggle";
+import { CommunicationStyleSection } from "@/components/settings/CommunicationStyleSection";
+import { ServicesSection } from "@/components/settings/ServicesSection";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
 import type { CopilotConfig } from "@/lib/api/messaging-types";
 
@@ -18,6 +20,8 @@ export default function SettingsPage() {
     blacklist: [],
     waitTimeMinutes: 5,
     enableAIForNewContacts: true,
+    communicationStyle: "profesional",
+    services: [],
   });
 
   const { data: loadedConfig } = useQuery({
@@ -44,7 +48,7 @@ export default function SettingsPage() {
 
   return (
     <main className="flex min-h-screen flex-col bg-background">
-      <header className="flex items-center gap-2 border-b border-border bg-card px-4 py-3">
+      <header className="flex items-center gap-2 bg-card px-4 py-3">
         <Link
           href="/"
           className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -52,7 +56,7 @@ export default function SettingsPage() {
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
-        <h1 className="text-lg font-semibold">Copilot Configuration</h1>
+        <h1 className="text-[18px] font-semibold">Configuration</h1>
       </header>
 
       <div className="flex-1 overflow-y-auto px-4 py-6">
@@ -75,6 +79,24 @@ export default function SettingsPage() {
               setConfig((c) => ({ ...c, enableAIForNewContacts }))
             }
           />
+
+          <div className="rounded-xl border border-border bg-muted/20 p-4">
+            <CommunicationStyleSection
+              value={config.communicationStyle}
+              onChange={(communicationStyle) =>
+                setConfig((c) => ({ ...c, communicationStyle }))
+              }
+            />
+          </div>
+
+          <div className="rounded-xl border border-border bg-muted/20 p-4">
+            <ServicesSection
+              services={config.services}
+              onChange={(services) =>
+                setConfig((c) => ({ ...c, services }))
+              }
+            />
+          </div>
 
           <Button
             className="w-full bg-black text-white hover:bg-black/90"

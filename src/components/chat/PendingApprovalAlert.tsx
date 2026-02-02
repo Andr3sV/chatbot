@@ -22,8 +22,8 @@ export function PendingApprovalAlert({ show, className }: PendingApprovalAlertPr
         <Bot className="h-4 w-4" />
       </div>
       <div>
-        <p className="text-[16px] font-semibold">Mensaje pendiente de respuesta</p>
-        <p className="text-[16px] text-muted-foreground">
+        <p className="text-[16px] md:text-[14px] font-semibold">Mensaje pendiente de respuesta</p>
+        <p className="text-[16px] md:text-[14px] text-muted-foreground">
           La IA requiere tu aprobación antes de enviar.
         </p>
       </div>

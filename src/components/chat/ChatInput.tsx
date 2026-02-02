@@ -206,7 +206,7 @@ export function ChatInput({
           }}
           placeholder={disabled ? "Tienes una sugerencia pendiente" : getPlaceholder(channel)}
           rows={1}
-          className="min-h-[24px] max-h-[150px] min-w-0 flex-1 resize-none overflow-y-auto overflow-x-hidden border-0 bg-transparent py-1.5 pl-1 pr-1 text-[16px] shadow-none focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
+          className="min-h-[24px] max-h-[150px] min-w-0 flex-1 resize-none overflow-y-auto overflow-x-hidden border-0 bg-transparent py-1.5 pl-1 pr-1 text-[16px] md:text-[14px] shadow-none focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isDisabled}
         />
         {isEditMode && onCancelEdit && (

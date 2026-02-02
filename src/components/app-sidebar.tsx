@@ -148,7 +148,7 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        "flex h-screen w-full shrink-0 flex-col md:w-72",
+        "flex h-screen w-full shrink-0 flex-col pt-3 md:w-72 md:pt-3",
         "border-r border-[hsl(var(--sidebar-border))]",
         "bg-[hsl(var(--sidebar-background))]"
       )}
@@ -175,7 +175,7 @@ export function AppSidebar() {
         </Link>
       </div>
       {selectedChannel !== "all" && filterTags.length > 0 && (
-        <div className="shrink-0 overflow-x-auto overflow-y-hidden px-3 pb-2">
+        <div className="mt-4 shrink-0 overflow-x-auto overflow-y-hidden px-3 pb-2">
           <div className="flex gap-1.5">
             {filterTags.map((tag) => (
               <button
@@ -183,7 +183,7 @@ export function AppSidebar() {
                 type="button"
                 onClick={() => setConversationFilter(tag.value)}
                 className={cn(
-                  "shrink-0 rounded-full px-3 py-1.5 text-[16px] font-medium transition-colors md:py-1",
+                  "shrink-0 rounded-full px-3 py-1.5 text-[16px] md:text-[14px] font-medium transition-colors md:py-1",
                   conversationFilter === tag.value
                     ? "bg-black text-white"
                     : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
@@ -200,7 +200,7 @@ export function AppSidebar() {
           <div className="min-w-0 max-w-full space-y-1 pb-4 md:space-y-0.5">
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-[16px] text-muted-foreground">
+                <p className="text-[16px] md:text-[14px] text-muted-foreground">
                   Cargando conversaciones...
                 </p>
               </div>
@@ -244,7 +244,7 @@ export function AppSidebar() {
                         />
                         <AvatarFallback
                           className={cn(
-                            "text-[16px] font-medium",
+                            "text-[16px] md:text-[14px] font-medium",
                             getAvatarColor(
                               conv.contact.name ?? conv.contact.phone ?? conv.id
                             ).bg
@@ -276,10 +276,10 @@ export function AppSidebar() {
                     </div>
                     <div className="min-w-0 overflow-hidden">
                       <div className="flex flex-col gap-0.5">
-                        <span className="truncate text-[16px] font-medium">
+                        <span className="truncate text-[18px] md:text-[14px] font-medium">
                           {displayName}
                         </span>
-                        <span className="truncate text-[16px] text-muted-foreground">
+                        <span className="truncate text-[16px] md:text-[14px] text-muted-foreground">
                           {lastPreview}
                           {lastPreview.length >= 35 ? "..." : ""}
                         </span>
@@ -287,7 +287,7 @@ export function AppSidebar() {
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-1">
                       {lastMsg && (
-                        <span className="text-[16px] text-muted-foreground">
+                        <span className="text-[16px] md:text-[14px] text-muted-foreground">
                           {format(lastMsg.timestamp, "HH:mm", { locale: es })}
                         </span>
                       )}
@@ -303,7 +303,7 @@ export function AppSidebar() {
                         )}
                         {conv.unreadCount > 0 && (
                           <Badge
-                            className="h-5 min-w-5 shrink-0 bg-[#BEFF50] px-1.5 text-[16px] text-black md:h-4 md:min-w-4 md:px-1"
+                            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#BEFF50] px-0 text-[14px] text-black md:h-6 md:w-6"
                           >
                             {conv.unreadCount}
                           </Badge>

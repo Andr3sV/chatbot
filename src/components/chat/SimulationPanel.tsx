@@ -66,7 +66,7 @@ export function SimulationPanel({
 
   return (
     <div className="space-y-4">
-      <p className="text-[16px] text-muted-foreground">
+      <p className="text-[16px] md:text-[14px] text-muted-foreground">
         Simula que un cliente de Luis te escribe. Tras enviar, la IA sugerirá
         una respuesta en ~1.5s.
       </p>
@@ -90,7 +90,7 @@ export function SimulationPanel({
         </Button>
       </form>
       {isWaitingForAI && (
-        <p className="text-[16px] text-primary">
+        <p className="text-[16px] md:text-[14px] text-primary">
           La IA está generando la sugerencia...
         </p>
       )}
@@ -101,7 +101,7 @@ export function SimulationPanel({
             type="button"
             variant="outline"
             size="sm"
-            className="h-7 text-[16px]"
+            className="h-7 text-[16px] md:text-[14px]"
             onClick={() => handleQuickAction(text)}
             disabled={isDisabled}
           >

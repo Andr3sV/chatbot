@@ -87,21 +87,21 @@ export function ChatHeader({
               alt={displayName}
             />
             <AvatarFallback
-              className={cn("text-[16px] font-medium", avatarColor.bg)}
+              className={cn("text-[16px] md:text-[14px] font-medium", avatarColor.bg)}
             >
               {getInitials(contact.phone, contact.name)}
             </AvatarFallback>
           </Avatar>
         </div>
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-[16px] font-semibold">{displayName}</h1>
+          <h1 className="truncate text-[18px] md:text-[14px] font-semibold">{displayName}</h1>
           {channel === "instagram" && meta?.postCaption && (
-            <p className="truncate text-[16px] text-muted-foreground">
+            <p className="truncate text-[16px] md:text-[14px] text-muted-foreground">
               {meta.postCaption}
             </p>
           )}
           {channel === "google" && meta?.businessName && (
-            <p className="flex items-center gap-1 text-[16px] text-muted-foreground">
+            <p className="flex items-center gap-1 text-[16px] md:text-[14px] text-muted-foreground">
               {meta.rating != null && (
                 <span className="flex items-center gap-0.5">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
@@ -112,7 +112,7 @@ export function ChatHeader({
             </p>
           )}
           {channel === "llamadas" && meta?.duration != null && (
-            <p className="flex items-center gap-1 text-[16px] text-muted-foreground">
+            <p className="flex items-center gap-1 text-[16px] md:text-[14px] text-muted-foreground">
               <Phone className="h-3 w-3" />
               {Math.floor(meta.duration / 60)}:{String(meta.duration % 60).padStart(2, "0")} min
             </p>

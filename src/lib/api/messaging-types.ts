@@ -36,8 +36,20 @@ export interface Conversation {
   meta?: ConversationMeta;
 }
 
+export type CommunicationStyle = "profesional" | "elegante" | "alegre";
+
+export interface ServiceProduct {
+  id: string;
+  name: string;
+  durationMinutes?: number;
+  priceMin: number;
+  priceMax?: number;
+}
+
 export interface CopilotConfig {
   blacklist: string[];
   waitTimeMinutes: number;
   enableAIForNewContacts: boolean;
+  communicationStyle: CommunicationStyle;
+  services: ServiceProduct[];
 }
