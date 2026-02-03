@@ -2,11 +2,11 @@
 
 export default function Home() {
   return (
-    <section className="flex flex-1 flex-col items-center justify-center border-l border-border bg-background">
+    <section className="flex flex-1 flex-col items-center justify-center border-l border-white chat-background-pattern">
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="rounded-full bg-muted p-6">
+        <div className="p-6">
           <svg
-            className="h-16 w-16 text-muted-foreground"
+            className="h-16 w-16 text-black"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

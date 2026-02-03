@@ -196,7 +196,7 @@ export function MessageBubble({
       >
         {!isClient && message.sender === "ai" && (
           <div className="flex items-center gap-3 py-2">
-            <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-[#DBFF95] ring-offset-2 ring-offset-transparent">
+            <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-[0.1px] ring-[#B988F8] ring-offset-2 ring-offset-transparent">
               <Image
                 src={AI_AVATAR_SRC}
                 alt="Sophi"
@@ -214,12 +214,12 @@ export function MessageBubble({
           className={cn(
             "rounded-2xl px-4 py-3",
             isClient
-              ? "rounded-tl-sm bg-muted text-foreground"
+              ? "rounded-tl-sm bg-white text-foreground"
               : isPending
-                ? "rounded-tr-sm bg-white border border-[#BEFF50] italic"
+                ? "rounded-tr-sm bg-[#EEFFC7] italic"
                 : isSending
-                  ? "rounded-tr-sm bg-[#DBFF95]/70 text-foreground opacity-80"
-                  : "rounded-tr-sm bg-[#DBFF95] text-foreground"
+                  ? "rounded-tr-sm bg-[#BEFF50]/70 text-foreground opacity-80"
+                  : "rounded-tr-sm bg-[#BEFF50] text-foreground"
           )}
         >
           <p className="whitespace-pre-wrap break-words text-[16px] md:text-[14px]">
@@ -277,7 +277,7 @@ export function MessageBubble({
             {isPending
               ? (
                 <>
-                  <span className="rounded-full bg-[#DBFF95] px-2 py-0.5 text-[16px] md:text-[14px] font-medium text-foreground">
+                  <span className="rounded-full bg-[#DCDCCB] px-2 py-0.5 text-[16px] md:text-[14px] font-medium text-foreground">
                     Borrador
                   </span>
                   <span>• Justo ahora</span>

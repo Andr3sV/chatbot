@@ -24,7 +24,7 @@ export function PendingApprovalAlert({ show, className }: PendingApprovalAlertPr
       <div>
         <p className="text-[16px] md:text-[14px] font-semibold">Mensaje pendiente de respuesta</p>
         <p className="text-[16px] md:text-[14px] text-muted-foreground">
-          La IA requiere tu aprobación antes de enviar.
+          Sophia requiere tu aprobación antes de enviar.
         </p>
       </div>
     </div>

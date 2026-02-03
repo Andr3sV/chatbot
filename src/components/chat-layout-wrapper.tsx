@@ -33,7 +33,7 @@ export function ChatLayoutWrapper({
       <main
         className={cn(
           "absolute inset-0 flex flex-col overflow-hidden transition-transform duration-300 ease-out md:relative md:inset-auto md:flex-1",
-          "border-l border-border bg-background",
+          "border-l border-white bg-background",
           "z-20 md:z-auto",
           isSecondaryViewOpen
             ? "translate-x-0"
