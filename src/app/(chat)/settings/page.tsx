@@ -47,8 +47,8 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-background">
-      <header className="flex items-center gap-2 bg-card px-4 py-3">
+    <main className="flex min-h-screen flex-col bg-[#FBFBF7]">
+      <header className="flex items-center gap-2 bg-[#FBFBF7] px-4 py-3">
         <Link
           href="/"
           className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -56,7 +56,7 @@ export default function SettingsPage() {
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
-        <h1 className="text-[18px] font-semibold">Configuration</h1>
+        <h1 className="text-[18px] font-semibold">Configuración</h1>
       </header>
 
       <div className="flex-1 overflow-y-auto px-4 py-6">
@@ -80,7 +80,7 @@ export default function SettingsPage() {
             }
           />
 
-          <div className="rounded-xl border border-border bg-muted/20 p-4">
+          <div className="rounded-xl border border-border p-4">
             <CommunicationStyleSection
               value={config.communicationStyle}
               onChange={(communicationStyle) =>
@@ -89,7 +89,7 @@ export default function SettingsPage() {
             />
           </div>
 
-          <div className="rounded-xl border border-border bg-muted/20 p-4">
+          <div className="rounded-xl border border-border p-4">
             <ServicesSection
               services={config.services}
               onChange={(services) =>
@@ -103,11 +103,11 @@ export default function SettingsPage() {
             onClick={handleSave}
             disabled={saveMutation.isPending}
           >
-            {saveMutation.isPending ? "Guardando..." : "Save Configuration"}
+            {saveMutation.isPending ? "Guardando..." : "Guardar configuración"}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
-            Settings are synced across all connected WhatsApp instances.
+            La configuración se sincroniza en todas las instancias de WhatsApp conectadas.
           </p>
         </div>
       </div>

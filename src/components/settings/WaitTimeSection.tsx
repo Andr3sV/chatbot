@@ -33,8 +33,7 @@ export function WaitTimeSection({
         <h3 className="font-semibold">Tiempo de espera</h3>
       </div>
       <p className="text-sm text-muted-foreground">
-        Set the minimum silence period before Copilot takes over the
-        conversation.
+        Define el período mínimo de silencio antes de que Sophia responsa de forma automática.
       </p>
       <div className="grid grid-cols-4 gap-2 sm:grid-cols-4">
         {WAIT_TIME_OPTIONS.map((opt) => (

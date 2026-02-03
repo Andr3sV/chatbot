@@ -16,9 +16,9 @@ export function EnableAIToggle({ enabled, onChange }: EnableAIToggleProps) {
           <Bot className="h-4 w-4 text-black" />
         </div>
         <div>
-        <h3 className="font-semibold">Enable AI for new contacts</h3>
+        <h3 className="font-semibold">Activar Sophia Whatsapp para nuevos contactos</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          Automatically start Copilot for unknown leads
+          Iniciar Sophia Whatsapp automáticamente para contactos desconocidos
         </p>
         </div>
       </div>

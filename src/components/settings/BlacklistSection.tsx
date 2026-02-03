@@ -40,7 +40,7 @@ export function BlacklistSection({ blacklist, onChange }: BlacklistSectionProps)
         <h3 className="font-semibold">Lista Negra (Blacklist)</h3>
       </div>
       <p className="text-sm text-muted-foreground">
-        Phone numbers in this list will never receive automated AI responses.
+        Los números de esta lista nunca recibirán respuestas automáticas de Sophia.
       </p>
       <div className="flex gap-2">
         <Input
