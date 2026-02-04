@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Instagram, Calendar } from "lucide-react";
+import { Instagram, Calendar } from "lucide-react";
 import { propuestasPendientes } from "@/lib/mock-posts";
 import { cn } from "@/lib/utils";
 
@@ -17,10 +17,9 @@ export function PropuestasCarousel() {
         </h2>
         <Link
           href={propuestasPendientes.length > 0 ? "/posts?filter=pendientes" : "/posts?filter=proximas"}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-accent text-accent-foreground hover:bg-accent/90 transition-colors shrink-0"
-          aria-label="Ver todos los posts"
+          className="text-sm font-medium text-foreground underline underline-offset-2 hover:text-foreground/80 transition-colors shrink-0"
         >
-          <ArrowUpRight className="h-5 w-5" />
+          Ver todo
         </Link>
       </div>
       <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
@@ -62,7 +61,7 @@ export function PropuestasCarousel() {
                     {post.scheduledAt}
                   </span>
                 </div>
-                <span className="inline-flex self-start px-2 py-0.5 rounded-full text-xs font-medium bg-accent/50 text-accent-foreground">
+                <span className="inline-flex self-start px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                   Pendiente de revisión
                 </span>
               </div>

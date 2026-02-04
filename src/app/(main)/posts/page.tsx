@@ -51,7 +51,7 @@ const postsByDate = buildPostsByDate();
 const WEEKDAYS = ["L", "M", "X", "J", "V", "S", "D"];
 
 const TYPE_STYLES = {
-  pendiente: { label: "Pendiente de revisión", dot: "bg-amber-500", border: "border-l-amber-500", badge: "bg-amber-100 text-amber-800" },
+  pendiente: { label: "Pendiente de revisión", dot: "bg-red-400", border: "border-l-red-400", badge: "bg-red-100 text-red-800" },
   aprobada: { label: "Aprobada", dot: "bg-emerald-500", border: "border-l-emerald-500", badge: "bg-emerald-100 text-emerald-800" },
   proxima: { label: "Próxima propuesta", dot: "bg-slate-500", border: "border-l-slate-500", badge: "bg-slate-100 text-slate-800" },
 } as const;
@@ -132,7 +132,7 @@ function PostsPageContent() {
                       <span className="inline-flex items-center gap-1 text-xs text-foreground/70"><Instagram className="h-3.5 w-3.5" />{post.platform}</span>
                       <span className="inline-flex items-center gap-1 text-xs text-foreground/70"><Calendar className="h-3.5 w-3.5" />{post.scheduledAt}</span>
                     </div>
-                    <span className="inline-flex self-start mt-2 px-2 py-0.5 rounded-full text-xs font-medium bg-accent/50 text-accent-foreground">Pendiente de revisión</span>
+                    <span className="inline-flex self-start mt-2 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Pendiente de revisión</span>
                   </div>
                   <div className="p-2 sm:p-4 flex sm:flex-col items-center justify-center">
                     <span className="text-xs text-foreground/60">Ver preview</span>
@@ -219,7 +219,7 @@ function PostsPageContent() {
               </div>
             )}
             <div className="flex flex-wrap gap-4 text-xs text-foreground/80 pt-2">
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />Pendiente de revisión</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />Pendiente de revisión</span>
               <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />Aprobada</span>
               <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-slate-500 shrink-0" />Próxima propuesta</span>
             </div>
@@ -262,7 +262,7 @@ function CalendarGrid({ year, month, postsByDate, selectedDate, onSelectDate }: 
             {hasPosts && (
               <div className="flex items-center gap-0.5 mt-1">
                 {typesPresent.map((type) => (
-                  <span key={type} className={cn("w-1.5 h-1.5 rounded-full shrink-0", isSelected ? type === "pendiente" ? "bg-amber-300" : type === "aprobada" ? "bg-emerald-300" : "bg-slate-300" : TYPE_STYLES[type].dot)} title={TYPE_STYLES[type].label} />
+                  <span key={type} className={cn("w-1.5 h-1.5 rounded-full shrink-0", isSelected ? type === "pendiente" ? "bg-red-300" : type === "aprobada" ? "bg-emerald-300" : "bg-slate-300" : TYPE_STYLES[type].dot)} title={TYPE_STYLES[type].label} />
                 ))}
               </div>
             )}
