@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { Suspense, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Instagram, Calendar, List, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,11 +15,7 @@ const parseDateKey = (scheduledAt: string) => {
   return `${year}-${m}-${day.padStart(2, "0")}`;
 };
 
-const propuestasPendientes = [
-  { id: "p1", title: "¿Quieres un hogar fresco... sin químicos ni aromas artificiales?", caption: "Descubre cómo mantener tu casa limpia y fresca con productos naturales. #HogarSano #EcoTucci", platform: "Instagram", scheduledAt: "18 Feb 2025, 10:00", imagePlaceholder: "bg-gradient-to-br from-amber-100 to-green-100" },
-  { id: "p2", title: "Fabricamos limpio desde la raíz", caption: "Cada producto está pensado para cuidar de ti y del planeta. #Sostenibilidad #LimpiezaNatural", platform: "Instagram", scheduledAt: "20 Feb 2025, 12:00", imagePlaceholder: "bg-gradient-to-br from-green-50 to-emerald-100" },
-  { id: "p3", title: "Nuevos productos para tu día a día sostenible", caption: "Pequeños cambios que marcan la diferencia. #VidaSostenible #EcoTucci", platform: "Instagram", scheduledAt: "22 Feb 2025, 09:00", imagePlaceholder: "bg-gradient-to-br from-teal-50 to-cyan-100" },
-];
+import { propuestasPendientes } from "@/lib/mock-posts";
 
 const proximasPropuestas = [
   { id: "n1", title: "Post promocional verano", scheduledAt: "24 Feb 2025, 14:00", imagePlaceholder: "bg-gradient-to-br from-amber-100 to-orange-100" },
@@ -59,9 +55,23 @@ const TYPE_STYLES = {
   proxima: { label: "Próxima propuesta", dot: "bg-slate-500", border: "border-l-slate-500", badge: "bg-slate-100 text-slate-800" },
 } as const;
 
-export default function PostsPage() {
+const VALID_FILTERS: PostFilter[] = ["pendientes", "proximas", "aprobadas"];
+
+function PostsPageContent() {
   const router = useRouter();
-  const [filter, setFilter] = React.useState<PostFilter>("proximas");
+  const searchParams = useSearchParams();
+  const filterParam = searchParams.get("filter");
+  const initialFilter: PostFilter =
+    filterParam && VALID_FILTERS.includes(filterParam as PostFilter)
+      ? (filterParam as PostFilter)
+      : "proximas";
+  const [filter, setFilter] = React.useState<PostFilter>(initialFilter);
+
+  useEffect(() => {
+    if (filterParam && VALID_FILTERS.includes(filterParam as PostFilter)) {
+      setFilter(filterParam as PostFilter);
+    }
+  }, [filterParam]);
   const [viewMode, setViewMode] = React.useState<"list" | "calendar">("list");
   const [selectedDate, setSelectedDate] = React.useState<string | null>(null);
 
@@ -210,6 +220,14 @@ export default function PostsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function PostsPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[hsl(var(--chat-background))]">Cargando...</div>}>
+      <PostsPageContent />
+    </Suspense>
   );
 }
 

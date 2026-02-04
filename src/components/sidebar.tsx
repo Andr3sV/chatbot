@@ -11,6 +11,7 @@ import {
   Mail,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AccountSelector } from "@/components/home/AccountSelector";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
@@ -33,8 +34,11 @@ export function Sidebar() {
       )}
     >
       <div className="flex flex-col gap-1 p-4">
-        <div className="mb-6 px-3">
+        <div className="mb-3 px-3">
           <span className="text-xl font-semibold text-primary">Plinng</span>
+        </div>
+        <div className="mb-4 px-1">
+          <AccountSelector />
         </div>
         {navItems.map((item) => {
           const isActive = item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(item.href + "/");
