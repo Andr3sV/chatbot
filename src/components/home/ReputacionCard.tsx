@@ -16,10 +16,10 @@ export function ReputacionCard() {
   const { reviews, rating, sectorRating, variacionLabel } = MOCK_REPUTACION;
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-3 mb-8">
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
-          <Award className="h-5 w-5 text-primary" />
+          <Award className="h-5 w-5 text-muted-foreground" />
           Reputación
         </h2>
         <button

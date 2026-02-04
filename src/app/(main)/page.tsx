@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Settings } from "lucide-react";
+import { Settings, MessageCircle, Eye } from "lucide-react";
 import { AccountSelector } from "@/components/home/AccountSelector";
 import { MayaInsightsBlock } from "@/components/home/MayaInsightsBlock";
 import { PropuestasCarousel } from "@/components/home/PropuestasCarousel";
 import { ChannelMetricCard } from "@/components/home/ChannelMetricCard";
 import { ReputacionCard } from "@/components/home/ReputacionCard";
+import { CompetidoresCard } from "@/components/home/CompetidoresCard";
 
 const MOCK_LLAMADAS = {
   recibidas: 12,
@@ -45,7 +46,8 @@ export default function HomePage() {
 
         {/* 2. Visibilidad: Mis propuestas */}
         <section className="space-y-3 mb-8">
-          <h2 className="text-lg font-semibold text-foreground">
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+            <Eye className="h-5 w-5 text-muted-foreground" />
             Visibilidad
           </h2>
           <PropuestasCarousel />
@@ -53,7 +55,8 @@ export default function HomePage() {
 
         {/* 3. Comunicación: WhatsApp, Instagram y Llamadas */}
         <section className="space-y-3 mb-8">
-          <h2 className="text-lg font-semibold text-foreground">
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+            <MessageCircle className="h-5 w-5 text-muted-foreground" />
             Comunicación
           </h2>
           <div className="space-y-3">
@@ -86,6 +89,9 @@ export default function HomePage() {
 
         {/* 4. Reputación */}
         <ReputacionCard />
+
+        {/* 5. Competidores */}
+        <CompetidoresCard />
       </div>
     </div>
   );
