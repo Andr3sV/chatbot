@@ -4,22 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
+  Eye,
   MessageCircle,
-  LayoutDashboard,
-  Grid3X3,
-  User,
-  Mail,
+  Award,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AccountSelector } from "@/components/home/AccountSelector";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/conversaciones", label: "Conversaciones", icon: MessageCircle },
-  { href: "/posts", label: "Posts", icon: Grid3X3 },
-  { href: "/messages", label: "Mensajes", icon: Mail },
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/profile", label: "Perfil", icon: User },
+  { href: "/posts", label: "Visibilidad", icon: Eye },
+  { href: "/conversaciones", label: "Comunicación", icon: MessageCircle },
+  { href: "/reputacion", label: "Reputación", icon: Award },
+  { href: "/competidores", label: "Competidores", icon: Users },
 ];
 
 export function Sidebar() {
@@ -50,7 +48,7 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-[16px] lg:text-[14px] font-medium transition-colors",
                 isActive
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-black text-white"
                   : "text-foreground hover:bg-accent hover:text-accent-foreground"
               )}
             >
