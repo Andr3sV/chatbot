@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FileText, ArrowUpRight, Instagram, Calendar } from "lucide-react";
+import { ArrowUpRight, Instagram, Calendar } from "lucide-react";
 import { propuestasPendientes } from "@/lib/mock-posts";
 import { cn } from "@/lib/utils";
 
@@ -9,21 +9,19 @@ const chatBg = "bg-[hsl(var(--chat-background))]";
 
 export function PropuestasCarousel() {
   return (
-    <section className="space-y-3 mb-8">
-      <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
-          <FileText className="h-5 w-5 text-primary" />
+    <section className="mb-8 rounded-xl border border-border bg-[#FBFBF7] p-4">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-lg font-semibold text-foreground">
           Mis propuestas
         </h2>
         <Link
           href={propuestasPendientes.length > 0 ? "/posts?filter=pendientes" : "/posts?filter=proximas"}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-accent text-accent-foreground hover:bg-accent/90 transition-colors shrink-0"
           aria-label="Ver todos los posts"
         >
           <ArrowUpRight className="h-5 w-5" />
         </Link>
       </div>
-
       <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
         {propuestasPendientes.map((post) => (
           <Link

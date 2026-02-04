@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, Camera, MessageCircle, Phone } from "lucide-react";
+import { Camera, MessageCircle, Phone } from "lucide-react";
 import type { Channel } from "@/lib/api/messaging-types";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -54,51 +54,46 @@ export function ChannelMetricCard({
     <Link href={href} className="block group">
       <Card
         className={cn(
-          "cursor-pointer transition-all duration-200 bg-[#FBFBF7]",
+          "cursor-pointer transition-all duration-200 bg-[#FBFBF7] rounded-xl h-[100px] flex",
           "hover:shadow-md hover:border-primary/30 hover:ring-2 hover:ring-primary/10",
           "active:scale-[0.99]"
         )}
       >
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div
-                className={cn(
-                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-full",
-                  channel === "whatsapp" && "bg-[#25D366]/20",
-                  channel === "instagram" && "bg-pink-500/20",
-                  channel === "llamadas" && "bg-blue-500/20"
-                )}
-              >
-                <Icon className={cn("h-5 w-5", config.iconClassName)} />
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                  {config.label}
-                </h3>
-                {metrics && (
-                  <div className="mt-0.5 space-y-0.5">
-                    {metrics.primary && (
-                      <p className="text-sm text-foreground/80">
-                        {metrics.primary}
-                      </p>
-                    )}
-                    {metrics.secondary && (
-                      <p className="text-xs text-foreground/60">
-                        {metrics.secondary}
-                      </p>
-                    )}
-                    {metrics.tertiary && (
-                      <p className="text-xs text-foreground/60">
-                        {metrics.tertiary}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
+        <CardContent className="p-4 flex flex-col justify-center w-full">
+          <div className="flex items-center gap-2">
+            <div
+              className={cn(
+                "flex h-9 w-9 shrink-0 items-center justify-center rounded-full",
+                channel === "whatsapp" && "bg-[#25D366]/20",
+                channel === "instagram" && "bg-pink-500/20",
+                channel === "llamadas" && "bg-blue-500/20"
+              )}
+            >
+              <Icon className={cn("h-5 w-5", config.iconClassName)} />
             </div>
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground group-hover:bg-accent/90 transition-colors">
-              <ArrowUpRight className="h-4 w-4" />
+            <div className="min-w-0 flex-1">
+              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                {config.label}
+              </h3>
+              {metrics && (
+                <div className="mt-0.5 space-y-0.5">
+                  {metrics.primary && (
+                    <p className="text-sm text-foreground/80">
+                      {metrics.primary}
+                    </p>
+                  )}
+                  {metrics.secondary && (
+                    <p className="text-xs text-foreground/60">
+                      {metrics.secondary}
+                    </p>
+                  )}
+                  {metrics.tertiary && (
+                    <p className="text-xs text-foreground/60">
+                      {metrics.tertiary}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </CardContent>

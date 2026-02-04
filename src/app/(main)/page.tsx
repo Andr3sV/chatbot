@@ -43,8 +43,13 @@ export default function HomePage() {
         {/* 1. Maya insights */}
         <MayaInsightsBlock />
 
-        {/* 2. Mis propuestas - carrusel */}
-        <PropuestasCarousel />
+        {/* 2. Visibilidad: Mis propuestas */}
+        <section className="space-y-3 mb-8">
+          <h2 className="text-lg font-semibold text-foreground">
+            Visibilidad
+          </h2>
+          <PropuestasCarousel />
+        </section>
 
         {/* 3. Comunicación: WhatsApp, Instagram y Llamadas */}
         <section className="space-y-3 mb-8">
