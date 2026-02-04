@@ -69,7 +69,7 @@ export function ChatHeader({
     <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3 md:py-2.5">
       <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-2.5">
         <Link
-          href="/"
+          href="/conversaciones"
           className="shrink-0 rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
           aria-label="Volver a conversaciones"
         >

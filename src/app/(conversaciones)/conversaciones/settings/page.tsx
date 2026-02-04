@@ -50,7 +50,7 @@ export default function SettingsPage() {
     <main className="flex min-h-screen flex-col bg-[#FBFBF7]">
       <header className="flex items-center gap-2 bg-[#FBFBF7] px-4 py-3">
         <Link
-          href="/"
+          href="/conversaciones"
           className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           aria-label="Volver"
         >

@@ -154,17 +154,18 @@ export function AppSidebar() {
       )}
     >
       <div className="relative flex h-16 items-center justify-between gap-2 px-4 md:h-14">
-        <div
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-muted-foreground md:hidden"
-          aria-hidden
+        <Link
+          href="/"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-accent-foreground))] md:hidden"
+          aria-label="Volver al inicio"
         >
           <ArrowLeft className="h-7 w-7" />
-        </div>
+        </Link>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 md:flex-1 md:min-w-0">
           <ChannelFilterDropdown />
         </div>
         <Link
-          href="/settings"
+          href="/conversaciones/settings"
           className={cn(
             "flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors md:h-9 md:w-9",
             "text-muted-foreground hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-accent-foreground))]"
@@ -209,7 +210,7 @@ export function AppSidebar() {
               </div>
             ) : (
               filteredConversations.map((conv) => {
-                const isActive = pathname === `/chat/${conv.id}`;
+                const isActive = pathname === `/conversaciones/chat/${conv.id}`;
                 const displayName = conv.contact.name ?? conv.contact.phone;
                 const lastMsg = conv.lastMessage;
                 const hasPendingApproval =
@@ -222,7 +223,7 @@ export function AppSidebar() {
                 return (
                   <Link
                     key={conv.id}
-                    href={`/chat/${conv.id}?channel=${conv.channel}`}
+                    href={`/conversaciones/chat/${conv.id}?channel=${conv.channel}`}
                     className={cn(
                       "grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 border-b border-[hsl(var(--sidebar-border))] px-3 py-4 transition-colors last:border-b-0 md:border-b-0 md:py-2.5",
                       "hover:bg-[hsl(var(--sidebar-accent))]",

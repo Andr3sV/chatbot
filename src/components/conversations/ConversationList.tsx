@@ -39,7 +39,7 @@ export function ConversationList() {
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <h2 className="text-lg font-semibold">Conversaciones</h2>
         <Link
-          href="/settings"
+          href="/conversaciones/settings"
           className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           aria-label="Configuración"
         >
@@ -56,7 +56,7 @@ export function ConversationList() {
             </div>
           ) : (
             conversations.map((conv) => {
-              const isActive = pathname === `/chat/${conv.id}`;
+              const isActive = pathname === `/conversaciones/chat/${conv.id}`;
               const displayName = conv.contact.name ?? conv.contact.phone;
               const lastMsg = conv.lastMessage;
               const lastPreview = lastMsg
@@ -66,7 +66,7 @@ export function ConversationList() {
               return (
                 <Link
                   key={conv.id}
-                  href={`/chat/${conv.id}`}
+                  href={`/conversaciones/chat/${conv.id}`}
                   className={cn(
                     "flex items-center gap-3 border-b border-border px-4 py-3 transition-colors hover:bg-accent/50",
                     isActive && "bg-accent"

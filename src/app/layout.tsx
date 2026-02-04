@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "Chatbot - Webchat con Agente IA",
@@ -14,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="antialiased">
+      <body className={`${inter.className} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

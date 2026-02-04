@@ -11,7 +11,7 @@ export function ChatLayoutWrapper({
 }) {
   const pathname = usePathname();
   const isSecondaryViewOpen =
-    pathname?.startsWith("/chat/") || pathname === "/settings";
+    pathname?.startsWith("/conversaciones/chat/") || pathname === "/conversaciones/settings";
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-background">

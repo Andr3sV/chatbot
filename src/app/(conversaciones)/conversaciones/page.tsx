@@ -1,6 +1,6 @@
 "use client";
 
-export default function Home() {
+export default function ConversacionesHome() {
   return (
     <section className="flex flex-1 flex-col items-center justify-center border-l border-white chat-background-pattern">
       <div className="flex flex-col items-center gap-4 text-center">
