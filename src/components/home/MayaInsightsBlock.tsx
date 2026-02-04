@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
@@ -24,6 +25,38 @@ function buildInsights(
     lines.push("Todo al día. Ayer respondiste varias conversaciones.");
   }
   return lines;
+}
+
+export function MayaMessageBlock({ message }: { message: React.ReactNode }) {
+  return (
+    <div className="mb-6 flex items-start gap-3">
+      <div className="relative z-10 h-12 w-12 shrink-0 overflow-hidden rounded-full ring-[0.1px] ring-[#B988F8] ring-offset-2 ring-offset-transparent">
+        <Image
+          src="/maya.png"
+          alt="Maya"
+          width={48}
+          height={48}
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div className="relative min-w-0 flex-1">
+        <div className="relative rounded-2xl rounded-bl-md bg-[#EEFFC7] px-4 py-3 shadow-sm">
+          <div
+            className="absolute left-0 top-6 -translate-x-1/2"
+            style={{
+              width: 0,
+              height: 0,
+              borderTop: "8px solid transparent",
+              borderBottom: "8px solid transparent",
+              borderRight: "12px solid #EEFFC7",
+            }}
+          />
+          <p className="text-sm font-semibold text-foreground">Maya</p>
+          <p className="mt-1 text-sm text-foreground/80">{message}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function MayaInsightsBlock() {

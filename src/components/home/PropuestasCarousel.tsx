@@ -10,7 +10,7 @@ const chatBg = "bg-[hsl(var(--chat-background))]";
 
 export function PropuestasCarousel() {
   return (
-    <section className="mb-8 rounded-xl border border-border bg-[#FBFBF7] p-4">
+    <section className="mb-8 rounded-xl border border-border bg-white p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold text-foreground">
           Mis propuestas
@@ -26,7 +26,7 @@ export function PropuestasCarousel() {
         {propuestasPendientes.map((post) => (
           <Link
             key={post.id}
-            href={`/posts/${post.id}/preview`}
+            href={`/posts/${post.id}/preview?from=pendientes`}
             className={cn(
               "flex-shrink-0 w-[280px] text-left overflow-hidden rounded-xl",
               "hover:shadow-md transition-shadow border border-[#C3C3C3]",

@@ -33,14 +33,14 @@ export default function HomePage() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F5F5EB]">
+    <div className="flex flex-col min-h-screen bg-[#FBFBF7]">
       <HomeMenuDrawer isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <NotificationsDrawer
         isOpen={notificationsOpen}
         onClose={() => setNotificationsOpen(false)}
       />
       {/* Header: menu + selector cuenta centrado + ajustes (estilo como lista conversaciones) */}
-      <header className="flex h-16 items-center justify-between gap-2 bg-[#F5F5EB] px-4 pt-3 md:h-14 md:pt-0 lg:px-8 rounded-b-2xl lg:rounded-b-none">
+      <header className="flex h-16 items-center justify-between gap-2 bg-[#FBFBF7] px-4 pt-3 md:h-14 md:pt-0 lg:px-8 rounded-b-2xl lg:rounded-b-none">
         <button
           type="button"
           onClick={() => setMenuOpen(true)}

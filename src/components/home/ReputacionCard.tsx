@@ -25,7 +25,7 @@ export function ReputacionCard() {
       <Link href="/reputacion" className="block group">
         <Card
           className={cn(
-            "cursor-pointer transition-all duration-200 border border-border bg-[#FBFBF7] rounded-xl",
+            "cursor-pointer transition-all duration-200 border border-border bg-white rounded-xl",
             "hover:shadow-md hover:border-primary/30 hover:ring-2 hover:ring-primary/10",
             "active:scale-[0.99]"
           )}

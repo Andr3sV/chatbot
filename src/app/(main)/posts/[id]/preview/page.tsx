@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Calendar, Send, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPropuestaById } from "@/lib/mock-posts";
@@ -14,6 +14,9 @@ const chatBg = "bg-[hsl(var(--chat-background))]";
 export default function PostPreviewPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const fromFilter = searchParams.get("from");
+  const backHref = fromFilter ? `/posts?filter=${fromFilter}` : "/posts";
   const id = typeof params.id === "string" ? params.id : "";
   const [toast, setToast] = React.useState(false);
   const propuesta = getPropuestaById(id ?? "");
@@ -31,7 +34,7 @@ export default function PostPreviewPage() {
     <div className={`flex flex-col min-h-screen ${chatBg}`}>
       <header className={`sticky top-0 z-30 ${chatBg} px-4 py-4 lg:px-8`}>
         <div className="max-w-4xl mx-auto flex items-center gap-4">
-          <Link href="/posts" className="flex items-center justify-center w-10 h-10 rounded-full text-black hover:bg-accent/20 transition-colors shrink-0" aria-label="Volver">
+          <Link href={backHref} className="flex items-center justify-center w-10 h-10 rounded-full text-black hover:bg-accent/20 transition-colors shrink-0" aria-label="Volver">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="flex-1 min-w-0">

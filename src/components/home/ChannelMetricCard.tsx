@@ -94,10 +94,10 @@ export function ChannelMetricCard({
       : null;
 
   return (
-    <Link href={href} className="block group">
+    <Link href={href} className="block group" aria-label={config.label}>
       <div
         className={cn(
-          "cursor-pointer rounded-xl border border-border bg-[#FBFBF7] p-4 transition-all duration-200",
+          "cursor-pointer rounded-xl border border-border bg-white p-4 transition-all duration-200",
           "hover:shadow-md hover:border-primary/30 hover:ring-2 hover:ring-primary/10",
           "active:scale-[0.99]"
         )}
@@ -114,17 +114,14 @@ export function ChannelMetricCard({
             <Icon className={cn("h-5 w-5", config.iconClassName)} />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-              {config.label}
-            </h3>
             {metricItems.length > 0 ? (
-              <div className="mt-2 flex gap-2">
+              <div className="flex gap-2">
                 {metricItems.map((m, i) => (
                   <MiniMetric key={i} value={m.value} label={m.label} />
                 ))}
               </div>
             ) : primaryString ? (
-              <p className="mt-1 text-sm text-foreground/80">
+              <p className="text-sm text-foreground/80">
                 {primaryString}
               </p>
             ) : null}

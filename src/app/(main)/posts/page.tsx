@@ -17,6 +17,7 @@ const parseDateKey = (scheduledAt: string) => {
 };
 
 import { propuestasPendientes } from "@/lib/mock-posts";
+import { MayaMessageBlock } from "@/components/home/MayaInsightsBlock";
 
 const proximasPropuestas = [
   { id: "n1", title: "Menú de temporada primavera", scheduledAt: "24 Feb 2025, 14:00", imagePlaceholder: "bg-gradient-to-br from-amber-100 to-orange-100" },
@@ -78,7 +79,7 @@ function PostsPageContent() {
 
   const selectedDatePosts = selectedDate ? (postsByDate[selectedDate] ?? []) : [];
 
-  const chatBg = "bg-[hsl(var(--chat-background))]";
+  const chatBg = "bg-[#FBFBF7]";
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -88,13 +89,13 @@ function PostsPageContent() {
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-semibold text-foreground truncate">Lista de posts</h1>
+            <h1 className="text-xl font-semibold text-foreground truncate">Propuestas</h1>
           </div>
           <div className="flex items-center gap-1 shrink-0">
-            <button type="button" onClick={() => setViewMode("list")} className={cn("flex items-center justify-center w-9 h-9 rounded-lg transition-colors", viewMode === "list" ? "bg-black text-white" : "text-foreground/70 hover:bg-accent/20")} aria-label="Vista lista">
+            <button type="button" onClick={() => setViewMode("list")} className={cn("flex items-center justify-center w-9 h-9 rounded-full transition-colors", viewMode === "list" ? "bg-black text-white" : "text-foreground/70 hover:bg-accent/20")} aria-label="Vista lista">
               <List className="h-5 w-5" />
             </button>
-            <button type="button" onClick={() => setViewMode("calendar")} className={cn("flex items-center justify-center w-9 h-9 rounded-lg transition-colors", viewMode === "calendar" ? "bg-black text-white" : "text-foreground/70 hover:bg-accent/20")} aria-label="Vista calendario">
+            <button type="button" onClick={() => setViewMode("calendar")} className={cn("flex items-center justify-center w-9 h-9 rounded-full transition-colors", viewMode === "calendar" ? "bg-black text-white" : "text-foreground/70 hover:bg-accent/20")} aria-label="Vista calendario">
               <CalendarDays className="h-5 w-5" />
             </button>
           </div>
@@ -104,20 +105,20 @@ function PostsPageContent() {
       <div className={`flex-1 px-4 py-6 lg:px-8 lg:py-8 max-w-4xl mx-auto w-full ${chatBg}`}>
         <div className="flex overflow-x-auto gap-2 mb-6 pb-1 -mx-1 px-1 overflow-y-hidden scrollbar-hide">
           <div className="flex gap-2 flex-nowrap min-w-0">
-            <button type="button" onClick={() => setFilter("proximas")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "proximas" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Próximas propuestas</button>
-            <button type="button" onClick={() => setFilter("pendientes")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "pendientes" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Propuestas pendientes de revisión</button>
-            <button type="button" onClick={() => setFilter("aprobadas")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "aprobadas" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Propuestas aprobadas</button>
+            <button type="button" onClick={() => setFilter("proximas")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "proximas" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Próximas</button>
+            <button type="button" onClick={() => setFilter("pendientes")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "pendientes" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Pendientes de aprobar</button>
+            <button type="button" onClick={() => setFilter("aprobadas")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "aprobadas" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Aprobadas</button>
           </div>
         </div>
 
         {viewMode === "list" && filter === "proximas" && (
-          <p className="text-sm text-foreground/80 mb-4">Si tienes alguna idea para el contenido del próximo mes, envíanos feedback; si no, el 28 de febrero te mandaremos una propuesta basada en nuestro conocimiento de tu negocio.</p>
+          <MayaMessageBlock message={<>Si tienes alguna idea para el contenido del próximo mes, envíanos feedback; si no, el <strong>28 de febrero</strong> te mandaremos una propuesta basada en nuestro conocimiento de tu negocio.</>} />
         )}
 
         {viewMode === "list" && filter === "pendientes" && (
           <div className="flex flex-col gap-4">
             {propuestasPendientes.map((post) => (
-              <button key={post.id} type="button" onClick={() => router.push(`/posts/${post.id}/preview`)} className={`w-full text-left overflow-hidden rounded-xl ${chatBg} hover:shadow-md transition-shadow border border-[#C3C3C3]`}>
+              <button key={post.id} type="button" onClick={() => router.push(`/posts/${post.id}/preview?from=${filter}`)} className={`w-full text-left overflow-hidden rounded-xl ${chatBg} hover:shadow-md transition-shadow border border-[#C3C3C3]`}>
                 <div className="p-0 flex flex-col sm:flex-row">
                   <div className="relative w-full sm:w-40 h-32 sm:h-auto sm:min-h-[120px] shrink-0 rounded-l-xl overflow-hidden">
                     {post.image ? (
@@ -127,15 +128,12 @@ function PostsPageContent() {
                     )}
                   </div>
                   <div className="flex-1 p-4 flex flex-col justify-between min-w-0">
-                    <p className="text-sm font-medium text-foreground line-clamp-2">{post.title}</p>
+                    <p className="text-[15px] font-medium text-foreground line-clamp-2">{post.title}</p>
                     <div className="flex flex-wrap items-center gap-2 mt-2">
-                      <span className="inline-flex items-center gap-1 text-xs text-foreground/70"><Instagram className="h-3.5 w-3.5" />{post.platform}</span>
-                      <span className="inline-flex items-center gap-1 text-xs text-foreground/70"><Calendar className="h-3.5 w-3.5" />{post.scheduledAt}</span>
+                      <span className="inline-flex items-center gap-1 text-[13px] text-foreground/70"><Instagram className="h-3.5 w-3.5" />{post.platform}</span>
+                      <span className="inline-flex items-center gap-1 text-[13px] text-foreground/70"><Calendar className="h-3.5 w-3.5" />{post.scheduledAt}</span>
                     </div>
-                    <span className="inline-flex self-start mt-2 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Pendiente de revisión</span>
-                  </div>
-                  <div className="p-2 sm:p-4 flex sm:flex-col items-center justify-center">
-                    <span className="text-xs text-foreground/60">Ver preview</span>
+                    <span className="inline-flex self-start mt-2 px-2 py-0.5 rounded-full text-[13px] font-medium bg-red-100 text-red-800">Pendiente de revisión</span>
                   </div>
                 </div>
               </button>
@@ -149,15 +147,16 @@ function PostsPageContent() {
               <button key={post.id} type="button" onClick={() => router.push("/posts/nueva")} className={`w-full text-left overflow-hidden rounded-xl ${chatBg} hover:shadow-md transition-shadow border border-[#C3C3C3]`}>
                 <div className="p-0 flex flex-col sm:flex-row">
                   <div className={cn("w-full sm:w-40 h-32 sm:h-auto sm:min-h-[120px] shrink-0 rounded-l-xl", post.imagePlaceholder)} />
-                  <div className="flex-1 p-4 flex flex-col justify-between min-w-0">
-                    <p className="text-sm font-medium text-foreground">{post.title}</p>
-                    <div className="flex flex-wrap items-center gap-2 mt-2">
-                      <span className="inline-flex items-center gap-1 text-xs text-foreground/70"><Calendar className="h-3.5 w-3.5" />Publicación propuesta: {post.scheduledAt}</span>
+                  <div className="flex-1 p-4 flex flex-col justify-between min-w-0 gap-3">
+                    <div>
+                      <p className="text-[15px] font-medium text-foreground">{post.title}</p>
+                      <div className="flex flex-wrap items-center gap-2 mt-2">
+                        <span className="inline-flex items-center gap-1 text-[13px] text-foreground/70"><Calendar className="h-3.5 w-3.5" />Publicación propuesta: {post.scheduledAt}</span>
+                      </div>
                     </div>
-                    <span className="inline-flex self-start mt-2 px-2 py-0.5 rounded-full text-xs font-medium bg-foreground/10 text-foreground/80">Añadir imagen y contexto</span>
-                  </div>
-                  <div className="p-2 sm:p-4 flex sm:flex-col items-center justify-center">
-                    <span className="text-xs font-medium text-foreground/80">Dejar feedback</span>
+                    <span className="inline-flex self-start items-center justify-center px-2 py-0.5 rounded-full text-[13px] font-medium bg-black text-white hover:bg-black/90 transition-colors">
+                      Añadir imagen y contexto
+                    </span>
                   </div>
                 </div>
               </button>
@@ -172,12 +171,12 @@ function PostsPageContent() {
                 <div className="p-0 flex flex-col sm:flex-row">
                   <div className={cn("w-full sm:w-40 h-32 sm:h-auto sm:min-h-[120px] shrink-0 rounded-l-xl", post.imagePlaceholder)} />
                   <div className="flex-1 p-4 flex flex-col justify-between min-w-0">
-                    <p className="text-sm font-medium text-foreground line-clamp-2">{post.title}</p>
+                    <p className="text-[15px] font-medium text-foreground line-clamp-2">{post.title}</p>
                     <div className="flex flex-wrap items-center gap-2 mt-2">
-                      <span className="inline-flex items-center gap-1 text-xs text-foreground/70"><Instagram className="h-3.5 w-3.5" />{post.platform}</span>
-                      <span className="inline-flex items-center gap-1 text-xs text-foreground/70"><Calendar className="h-3.5 w-3.5" />{post.scheduledAt}</span>
+                      <span className="inline-flex items-center gap-1 text-[13px] text-foreground/70"><Instagram className="h-3.5 w-3.5" />{post.platform}</span>
+                      <span className="inline-flex items-center gap-1 text-[13px] text-foreground/70"><Calendar className="h-3.5 w-3.5" />{post.scheduledAt}</span>
                     </div>
-                    <span className="inline-flex self-start mt-2 px-2 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary">Aprobada</span>
+                    <span className="inline-flex self-start mt-2 px-2 py-0.5 rounded-full text-[13px] font-medium bg-primary/20 text-primary">Aprobada</span>
                   </div>
                 </div>
               </button>
@@ -232,7 +231,7 @@ function PostsPageContent() {
 
 export default function PostsPage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[hsl(var(--chat-background))]">Cargando...</div>}>
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[#FBFBF7]">Cargando...</div>}>
       <PostsPageContent />
     </Suspense>
   );
@@ -257,7 +256,7 @@ function CalendarGrid({ year, month, postsByDate, selectedDate, onSelectDate }: 
         const typesPresent = Array.from(new Set(dayPosts.map((p) => p.type))) as Array<keyof typeof TYPE_STYLES>;
         const isSelected = selectedDate === key;
         return (
-          <button key={key} type="button" onClick={() => onSelectDate(key)} className={cn("min-h-[44px] flex flex-col items-center justify-center text-sm transition-colors", isSelected ? "bg-black text-white rounded-lg" : "text-foreground hover:bg-accent/20", hasPosts && !isSelected && "font-medium")}>
+          <button key={key} type="button" onClick={() => onSelectDate(key)} className={cn("min-h-[44px] flex flex-col items-center justify-center text-sm transition-colors rounded-full", isSelected ? "bg-black text-white" : "text-foreground hover:bg-accent/20", hasPosts && !isSelected && "font-medium")}>
             {day}
             {hasPosts && (
               <div className="flex items-center gap-0.5 mt-1">

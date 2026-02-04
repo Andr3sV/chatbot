@@ -44,7 +44,7 @@ export function CompetidoresCard() {
       </h2>
       <Link href="/competidores" className="mt-6 block">
         <Card
-          className="border border-border bg-[#FBFBF7] rounded-xl transition-all hover:shadow-md hover:border-primary/30 cursor-pointer"
+          className="border border-border bg-white rounded-xl transition-all hover:shadow-md hover:border-primary/30 cursor-pointer"
         >
           <CardContent className="p-4">
             <p className="text-base font-semibold text-foreground mb-3">
