@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Camera, MessageCircle, Phone } from "lucide-react";
 import type { Channel } from "@/lib/api/messaging-types";
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 const CHANNEL_CONFIG: Record<
@@ -32,14 +31,31 @@ const CHANNEL_CONFIG: Record<
   },
 };
 
+type MetricItem = string | { value: string; label: string };
+
 interface ChannelMetricCardProps {
   channel: Channel;
   metrics?: {
-    primary?: string;
-    secondary?: string;
-    tertiary?: string;
+    primary?: MetricItem;
+    secondary?: MetricItem;
+    tertiary?: MetricItem;
   };
   href: string;
+}
+
+function MiniMetric({
+  value,
+  label,
+}: {
+  value: string;
+  label: string;
+}) {
+  return (
+    <div className="min-w-0 flex-1 rounded-lg border border-border/60 bg-white/60 px-3 py-2">
+      <p className="text-lg font-bold tabular-nums text-foreground">{value}</p>
+      <p className="text-[11px] text-foreground/60 truncate">{label}</p>
+    </div>
+  );
 }
 
 export function ChannelMetricCard({
@@ -50,54 +66,71 @@ export function ChannelMetricCard({
   const config = CHANNEL_CONFIG[channel];
   const Icon = config.Icon;
 
+  const metricItems: { value: string; label: string }[] = [];
+  if (metrics?.primary) {
+    if (typeof metrics.primary === "object") {
+      metricItems.push({
+        value: metrics.primary.value,
+        label: metrics.primary.label,
+      });
+    }
+  }
+  if (metrics?.secondary && typeof metrics.secondary === "object") {
+    metricItems.push({
+      value: metrics.secondary.value,
+      label: metrics.secondary.label,
+    });
+  }
+  if (metrics?.tertiary && typeof metrics.tertiary === "object") {
+    metricItems.push({
+      value: metrics.tertiary.value,
+      label: metrics.tertiary.label,
+    });
+  }
+
+  const primaryString =
+    metrics?.primary && typeof metrics.primary === "string"
+      ? metrics.primary
+      : null;
+
   return (
     <Link href={href} className="block group">
-      <Card
+      <div
         className={cn(
-          "cursor-pointer transition-all duration-200 bg-[#FBFBF7] rounded-xl h-[100px] flex",
+          "cursor-pointer rounded-xl border border-border bg-[#FBFBF7] p-4 transition-all duration-200",
           "hover:shadow-md hover:border-primary/30 hover:ring-2 hover:ring-primary/10",
           "active:scale-[0.99]"
         )}
       >
-        <CardContent className="p-4 flex flex-col justify-center w-full">
-          <div className="flex items-center gap-2">
-            <div
-              className={cn(
-                "flex h-9 w-9 shrink-0 items-center justify-center rounded-full",
-                channel === "whatsapp" && "bg-[#25D366]/20",
-                channel === "instagram" && "bg-pink-500/20",
-                channel === "llamadas" && "bg-blue-500/20"
-              )}
-            >
-              <Icon className={cn("h-5 w-5", config.iconClassName)} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                {config.label}
-              </h3>
-              {metrics && (
-                <div className="mt-0.5 space-y-0.5">
-                  {metrics.primary && (
-                    <p className="text-sm text-foreground/80">
-                      {metrics.primary}
-                    </p>
-                  )}
-                  {metrics.secondary && (
-                    <p className="text-xs text-foreground/60">
-                      {metrics.secondary}
-                    </p>
-                  )}
-                  {metrics.tertiary && (
-                    <p className="text-xs text-foreground/60">
-                      {metrics.tertiary}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
+        <div className="flex items-center gap-3">
+          <div
+            className={cn(
+              "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+              channel === "whatsapp" && "bg-[#25D366]/15",
+              channel === "instagram" && "bg-pink-500/15",
+              channel === "llamadas" && "bg-blue-500/15"
+            )}
+          >
+            <Icon className={cn("h-5 w-5", config.iconClassName)} />
           </div>
-        </CardContent>
-      </Card>
+          <div className="min-w-0 flex-1">
+            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+              {config.label}
+            </h3>
+            {metricItems.length > 0 ? (
+              <div className="mt-2 flex gap-2">
+                {metricItems.map((m, i) => (
+                  <MiniMetric key={i} value={m.value} label={m.label} />
+                ))}
+              </div>
+            ) : primaryString ? (
+              <p className="mt-1 text-sm text-foreground/80">
+                {primaryString}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      </div>
     </Link>
   );
 }

@@ -20,6 +20,11 @@ const MOCK_WHATSAPP = {
   tiempoAhorrado: "2h",
 };
 
+const MOCK_INSTAGRAM = {
+  respondidos: 8,
+  pendientes: 2,
+};
+
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F5F5EB]">
@@ -68,24 +73,31 @@ export default function HomePage() {
             <ChannelMetricCard
               channel="llamadas"
               metrics={{
-                primary: `${MOCK_LLAMADAS.recibidas} llamadas recibidas`,
-                secondary: `${MOCK_LLAMADAS.minutosAhorrados} min ahorrados`,
+                primary: {
+                  value: String(MOCK_LLAMADAS.recibidas),
+                  label: "Recibidas",
+                },
+                secondary: {
+                  value: `${MOCK_LLAMADAS.minutosAhorrados} min`,
+                  label: "Ahorrados",
+                },
               }}
               href="/conversaciones?channel=llamadas"
             />
             <ChannelMetricCard
               channel="whatsapp"
               metrics={{
-                primary: `${MOCK_WHATSAPP.respondidos} mensajes respondidos`,
-                secondary: `${MOCK_WHATSAPP.pendientesHumano} pendiente${MOCK_WHATSAPP.pendientesHumano !== 1 ? "s" : ""} que requiere${MOCK_WHATSAPP.pendientesHumano !== 1 ? "n" : ""} humano`,
-                tertiary: `~${MOCK_WHATSAPP.tiempoAhorrado} ahorrados`,
+                primary: { value: String(MOCK_WHATSAPP.respondidos), label: "Respondidos" },
+                secondary: { value: String(MOCK_WHATSAPP.pendientesHumano), label: "Pendientes" },
+                tertiary: { value: `~${MOCK_WHATSAPP.tiempoAhorrado}`, label: "Ahorrados" },
               }}
               href="/conversaciones?channel=whatsapp"
             />
             <ChannelMetricCard
               channel="instagram"
               metrics={{
-                primary: "Conversaciones de Instagram",
+                primary: { value: String(MOCK_INSTAGRAM.respondidos), label: "Respondidos" },
+                secondary: { value: String(MOCK_INSTAGRAM.pendientes), label: "Pendientes" },
               }}
               href="/conversaciones?channel=instagram"
             />

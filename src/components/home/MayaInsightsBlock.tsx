@@ -4,8 +4,6 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getMessagingClient } from "@/lib/api/mock-messaging";
 import { propuestasPendientes } from "@/lib/mock-posts";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 function buildInsights(
   pendingApprovalCount: number,
@@ -42,20 +40,32 @@ export function MayaInsightsBlock() {
   const insights = buildInsights(pendingApprovalCount, pendingPostsCount);
 
   return (
-    <Card className="mb-6 border-0 bg-[#EEFFC7] overflow-hidden">
-      <CardContent className="p-4">
-        <div className="flex items-center gap-4">
-          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full ring-[0.1px] ring-[#B988F8] ring-offset-2 ring-offset-transparent">
-            <Image
-              src="/maya.png"
-              alt="Maya"
-              width={48}
-              height={48}
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <div className="min-w-0 flex-1 space-y-1">
-            <p className="text-sm font-medium text-foreground">Maya</p>
+    <div className="mb-6 flex items-start gap-3">
+      <div className="relative z-10 h-12 w-12 shrink-0 overflow-hidden rounded-full ring-[0.1px] ring-[#B988F8] ring-offset-2 ring-offset-transparent">
+        <Image
+          src="/maya.png"
+          alt="Maya"
+          width={48}
+          height={48}
+          className="h-full w-full object-cover"
+        />
+      </div>
+      {/* Burbuja de diálogo con cola apuntando a Maya */}
+      <div className="relative min-w-0 flex-1">
+        <div className="relative rounded-2xl rounded-bl-md bg-[#EEFFC7] px-4 py-3 shadow-sm">
+          {/* Cola de la burbuja */}
+          <div
+            className="absolute left-0 top-6 -translate-x-1/2"
+            style={{
+              width: 0,
+              height: 0,
+              borderTop: "8px solid transparent",
+              borderBottom: "8px solid transparent",
+              borderRight: "12px solid #EEFFC7",
+            }}
+          />
+          <p className="text-sm font-semibold text-foreground">Maya</p>
+          <div className="mt-1 space-y-0.5">
             {insights.map((line, i) => (
               <p key={i} className="text-sm text-foreground/80">
                 {line}
@@ -63,7 +73,7 @@ export function MayaInsightsBlock() {
             ))}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

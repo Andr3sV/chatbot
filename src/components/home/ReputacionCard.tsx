@@ -1,6 +1,7 @@
 "use client";
 
-import { Award, ArrowUpRight, Star } from "lucide-react";
+import Link from "next/link";
+import { Award, Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -17,20 +18,18 @@ export function ReputacionCard() {
 
   return (
     <section className="space-y-3 mb-8">
-      <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
-          <Award className="h-5 w-5 text-muted-foreground" />
-          Reputación
-        </h2>
-        <button
-          type="button"
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
-          aria-label="Ver reputación"
+      <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+        <Award className="h-5 w-5 text-muted-foreground" />
+        Reputación
+      </h2>
+      <Link href="/reputacion" className="block group">
+        <Card
+          className={cn(
+            "cursor-pointer transition-all duration-200 border border-border bg-[#FBFBF7] rounded-xl",
+            "hover:shadow-md hover:border-primary/30 hover:ring-2 hover:ring-primary/10",
+            "active:scale-[0.99]"
+          )}
         >
-          <ArrowUpRight className="h-5 w-5" />
-        </button>
-      </div>
-      <Card className="border border-border bg-[#FBFBF7] rounded-xl">
         <CardContent className="p-4">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0 flex-1">
@@ -74,7 +73,8 @@ export function ReputacionCard() {
             </div>
           </div>
         </CardContent>
-      </Card>
+        </Card>
+      </Link>
     </section>
   );
 }
