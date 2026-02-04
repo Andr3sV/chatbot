@@ -24,7 +24,10 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 safe-area-bottom flex items-end justify-between px-3 pb-[10px] gap-2">
+    <nav
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 flex items-end justify-between px-3 gap-2"
+      style={{ paddingBottom: "max(10px, calc(10px + env(safe-area-inset-bottom, 0px)))" }}
+    >
       {/* Contenedor iconos: solo este tiene fondo sidebar */}
       <div
         className={cn(
