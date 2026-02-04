@@ -29,10 +29,10 @@ export function ChatLayoutWrapper({
         <AppSidebar />
       </div>
 
-      {/* Main - chat slides in from right on mobile */}
+      {/* Main - chat slides in from right on mobile; flex-1 para ajustarse al ancho en desktop */}
       <main
         className={cn(
-          "absolute inset-0 flex flex-col overflow-hidden transition-transform duration-300 ease-out md:relative md:inset-auto md:flex-1",
+          "absolute inset-0 flex flex-col overflow-hidden transition-transform duration-300 ease-out md:relative md:inset-auto md:flex-1 md:min-w-0",
           "border-l border-white bg-background",
           "z-20 md:z-auto",
           isSecondaryViewOpen
