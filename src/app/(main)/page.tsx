@@ -23,18 +23,18 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F5F5EB]">
       {/* Header: selector cuenta + ajustes */}
-      <header className="bg-[#F5F5EB] px-4 py-4 lg:px-8 rounded-b-2xl lg:rounded-b-none">
-        <div className="flex items-center justify-between max-w-6xl mx-auto">
+      <header className="flex h-16 items-center bg-[#F5F5EB] px-4 lg:h-14 lg:px-8 rounded-b-2xl lg:rounded-b-none">
+        <div className="flex w-full max-w-6xl items-center justify-between mx-auto">
           <div className="lg:hidden">
             <AccountSelector />
           </div>
           <div className="hidden lg:block lg:flex-1" aria-hidden />
           <Link
             href="/conversaciones/settings"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-black/5"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-black/5 md:h-9 md:w-9"
             aria-label="Ajustes"
           >
-            <Settings className="h-5 w-5" />
+            <Settings className="h-7 w-7 md:h-4 md:w-4" />
           </Link>
         </div>
       </header>

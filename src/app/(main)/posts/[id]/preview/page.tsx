@@ -1,29 +1,22 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Calendar, Send, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getPropuestaById } from "@/lib/mock-posts";
 import { cn } from "@/lib/utils";
 
 const chatBg = "bg-[hsl(var(--chat-background))]";
-
-const getPropuestaById = (id: string) => {
-  const data: Record<string, { title: string; caption: string; scheduledAt: string; imagePlaceholder: string }> = {
-    p1: { title: "¿Quieres un hogar fresco... sin químicos ni aromas artificiales?", caption: "Descubre cómo mantener tu casa limpia y fresca con productos naturales. #HogarSano #EcoTucci", scheduledAt: "18 Feb 2025, 10:00", imagePlaceholder: "bg-gradient-to-br from-amber-100 to-green-100" },
-    p2: { title: "Fabricamos limpio desde la raíz", caption: "Cada producto está pensado para cuidar de ti y del planeta. #Sostenibilidad #LimpiezaNatural", scheduledAt: "20 Feb 2025, 12:00", imagePlaceholder: "bg-gradient-to-br from-green-50 to-emerald-100" },
-    p3: { title: "Nuevos productos para tu día a día sostenible", caption: "Pequeños cambios que marcan la diferencia. #VidaSostenible #EcoTucci", scheduledAt: "22 Feb 2025, 09:00", imagePlaceholder: "bg-gradient-to-br from-teal-50 to-cyan-100" },
-  };
-  return data[id] ?? data.p1;
-};
 
 export default function PostPreviewPage() {
   const params = useParams();
   const router = useRouter();
   const id = typeof params.id === "string" ? params.id : "";
   const [toast, setToast] = React.useState(false);
-  const propuesta = getPropuestaById(id);
+  const propuesta = getPropuestaById(id ?? "");
 
   const handleAceptar = () => {
     setToast(true);
@@ -51,16 +44,22 @@ export default function PostPreviewPage() {
       <div className="flex-1 px-4 py-6 lg:px-8 lg:py-8 max-w-md mx-auto w-full">
         <div className="rounded-xl overflow-hidden border border-border bg-white shadow-sm">
           <div className="flex items-center gap-3 p-3 border-b border-border">
-            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-semibold">PT</div>
+            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-semibold">VB</div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground">ecotucci</p>
-              <p className="text-xs text-foreground/60">Eco Tucci</p>
+              <p className="text-sm font-semibold text-foreground">vinobar</p>
+              <p className="text-xs text-foreground/60">Bar de Vinos</p>
             </div>
           </div>
-          <div className={cn("aspect-square w-full min-h-[280px]", propuesta.imagePlaceholder)} />
+          <div className="relative aspect-square w-full min-h-[280px] overflow-hidden">
+            {propuesta.image ? (
+              <Image src={propuesta.image} alt="" fill className="object-cover" sizes="400px" />
+            ) : (
+              <div className={cn("w-full h-full", propuesta.imagePlaceholder)} />
+            )}
+          </div>
           <div className="p-3 space-y-1">
             <p className="text-sm text-foreground">
-              <span className="font-semibold mr-1">ecotucci</span>
+              <span className="font-semibold mr-1">vinobar</span>
               {propuesta.caption}
             </p>
           </div>

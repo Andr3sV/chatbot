@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Instagram, Calendar } from "lucide-react";
 import { propuestasPendientes } from "@/lib/mock-posts";
@@ -34,12 +35,19 @@ export function PropuestasCarousel() {
             )}
           >
             <div className="flex flex-col">
-              <div
-                className={cn(
-                  "w-full h-32 shrink-0 rounded-t-xl",
-                  post.imagePlaceholder
+              <div className="relative w-full h-32 shrink-0 rounded-t-xl overflow-hidden">
+                {post.image ? (
+                  <Image
+                    src={post.image}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="280px"
+                  />
+                ) : (
+                  <div className={cn("w-full h-full", post.imagePlaceholder)} />
                 )}
-              />
+              </div>
               <div className="flex-1 p-4 flex flex-col gap-2 min-w-0">
                 <p className="text-sm font-medium text-foreground line-clamp-2">
                   {post.title}

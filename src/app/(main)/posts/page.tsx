@@ -1,6 +1,7 @@
 "use client";
 
 import React, { Suspense, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Instagram, Calendar, List, CalendarDays } from "lucide-react";
@@ -18,16 +19,16 @@ const parseDateKey = (scheduledAt: string) => {
 import { propuestasPendientes } from "@/lib/mock-posts";
 
 const proximasPropuestas = [
-  { id: "n1", title: "Post promocional verano", scheduledAt: "24 Feb 2025, 14:00", imagePlaceholder: "bg-gradient-to-br from-amber-100 to-orange-100" },
-  { id: "n2", title: "Antes y después", scheduledAt: "26 Feb 2025, 11:00", imagePlaceholder: "bg-gradient-to-br from-slate-100 to-slate-200" },
-  { id: "n3", title: "Consejos de limpieza", scheduledAt: "1 Mar 2025, 09:00", imagePlaceholder: "bg-gradient-to-br from-emerald-50 to-teal-100" },
-  { id: "n4", title: "Nuevo lanzamiento", scheduledAt: "3 Mar 2025, 18:00", imagePlaceholder: "bg-gradient-to-br from-violet-50 to-purple-100" },
+  { id: "n1", title: "Menú de temporada primavera", scheduledAt: "24 Feb 2025, 14:00", imagePlaceholder: "bg-gradient-to-br from-amber-100 to-orange-100" },
+  { id: "n2", title: "Horario de tapas y vino", scheduledAt: "26 Feb 2025, 11:00", imagePlaceholder: "bg-gradient-to-br from-slate-100 to-slate-200" },
+  { id: "n3", title: "Nueva carta de vinos", scheduledAt: "1 Mar 2025, 09:00", imagePlaceholder: "bg-gradient-to-br from-emerald-50 to-teal-100" },
+  { id: "n4", title: "Evento: noche de jazz y vino", scheduledAt: "3 Mar 2025, 18:00", imagePlaceholder: "bg-gradient-to-br from-violet-50 to-purple-100" },
 ];
 
 const propuestasAprobadas = [
-  { id: "a1", title: "Lanzamiento colección primavera", platform: "Instagram", scheduledAt: "25 Feb 2025, 11:00", imagePlaceholder: "bg-gradient-to-br from-pink-50 to-rose-100" },
-  { id: "a2", title: "Tips de sostenibilidad en casa", platform: "Instagram", scheduledAt: "28 Feb 2025, 09:00", imagePlaceholder: "bg-gradient-to-br from-green-100 to-emerald-100" },
-  { id: "a3", title: "Antes y después: cliente Eco Tucci", platform: "Instagram", scheduledAt: "2 Mar 2025, 18:00", imagePlaceholder: "bg-gradient-to-br from-amber-50 to-yellow-100" },
+  { id: "a1", title: "Inauguración terraza de verano", platform: "Instagram", scheduledAt: "25 Feb 2025, 11:00", imagePlaceholder: "bg-gradient-to-br from-pink-50 to-rose-100" },
+  { id: "a2", title: "Vino de la casa del mes", platform: "Instagram", scheduledAt: "28 Feb 2025, 09:00", imagePlaceholder: "bg-gradient-to-br from-green-100 to-emerald-100" },
+  { id: "a3", title: "Reseña: cena de aniversario", platform: "Instagram", scheduledAt: "2 Mar 2025, 18:00", imagePlaceholder: "bg-gradient-to-br from-amber-50 to-yellow-100" },
 ];
 
 const allScheduledPosts = [
@@ -118,7 +119,13 @@ function PostsPageContent() {
             {propuestasPendientes.map((post) => (
               <button key={post.id} type="button" onClick={() => router.push(`/posts/${post.id}/preview`)} className={`w-full text-left overflow-hidden rounded-xl ${chatBg} hover:shadow-md transition-shadow border border-[#C3C3C3]`}>
                 <div className="p-0 flex flex-col sm:flex-row">
-                  <div className={cn("w-full sm:w-40 h-32 sm:h-auto sm:min-h-[120px] shrink-0 rounded-l-xl", post.imagePlaceholder)} />
+                  <div className="relative w-full sm:w-40 h-32 sm:h-auto sm:min-h-[120px] shrink-0 rounded-l-xl overflow-hidden">
+                    {post.image ? (
+                      <Image src={post.image} alt="" fill className="object-cover" sizes="160px" />
+                    ) : (
+                      <div className={cn("w-full h-full", post.imagePlaceholder)} />
+                    )}
+                  </div>
                   <div className="flex-1 p-4 flex flex-col justify-between min-w-0">
                     <p className="text-sm font-medium text-foreground line-clamp-2">{post.title}</p>
                     <div className="flex flex-wrap items-center gap-2 mt-2">

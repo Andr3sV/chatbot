@@ -30,7 +30,7 @@ export function ReputacionCard() {
           <ArrowUpRight className="h-5 w-5" />
         </button>
       </div>
-      <Card>
+      <Card className="border border-border bg-[#FBFBF7] rounded-xl">
         <CardContent className="p-4">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0 flex-1">

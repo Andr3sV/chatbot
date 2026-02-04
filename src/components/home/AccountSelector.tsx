@@ -21,17 +21,17 @@ export function AccountSelector() {
         <Button
           variant="ghost"
           className={cn(
-            "h-10 gap-2 rounded-full px-3 font-normal text-foreground",
+            "h-12 gap-2 rounded-full px-3 font-normal text-foreground md:h-9 md:gap-1.5 md:px-3",
             "hover:bg-black/5"
           )}
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-sm font-bold text-foreground">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-sm font-bold text-foreground md:h-7 md:w-7 md:text-xs">
             {selectedAccount.initials}
           </div>
-          <span className="truncate text-base font-semibold max-w-[120px]">
+          <span className="truncate text-base font-semibold max-w-[120px] md:text-sm">
             {selectedAccount.name}
           </span>
-          <ChevronDown className="h-4 w-4 shrink-0 text-foreground/70" />
+          <ChevronDown className="h-5 w-5 shrink-0 text-foreground/70 md:h-4 md:w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56">
