@@ -39,7 +39,6 @@ export default function PostPreviewPage() {
           </Link>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-semibold text-foreground truncate">Preview</h1>
-            <p className="text-sm text-foreground/70">Así se verá en Instagram</p>
           </div>
         </div>
       </header>
@@ -74,11 +73,11 @@ export default function PostPreviewPage() {
         </div>
 
         <div className="mt-8 flex flex-col gap-3">
-          <Button variant="outline" className="w-full gap-2" onClick={handleSolicitarCambios}>
+          <Button variant="outline" className="w-full gap-2 rounded-full" onClick={handleSolicitarCambios}>
             <Send className="h-4 w-4" />
             Solicitar cambios
           </Button>
-          <Button className="w-full gap-2 bg-primary hover:bg-primary/90" onClick={handleAceptar}>
+          <Button className="w-full gap-2 rounded-full bg-black text-white hover:bg-black/90" onClick={handleAceptar}>
             <Check className="h-4 w-4" />
             Aceptar propuesta
           </Button>

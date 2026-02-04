@@ -27,7 +27,6 @@ export default function NuevaPropuestaPage() {
           </Link>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-semibold text-foreground truncate">Nueva propuesta</h1>
-            <p className="text-sm text-foreground/70">Añade imagen, contexto y fecha de publicación</p>
           </div>
         </div>
       </header>
@@ -57,7 +56,7 @@ export default function NuevaPropuestaPage() {
           </div>
         </label>
 
-        <Button className="w-full gap-2" size="lg">Guardar propuesta</Button>
+        <Button className="w-full gap-2 rounded-full bg-black text-white hover:bg-black/90" size="lg">Guardar propuesta</Button>
       </div>
     </div>
   );
