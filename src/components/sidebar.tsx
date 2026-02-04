@@ -62,11 +62,9 @@ export function Sidebar() {
             />
           )}
         </div>
-        {!isCollapsed && (
-          <div className="mb-4 px-1">
-            <AccountSelector />
-          </div>
-        )}
+        <div className={cn("mb-4", isCollapsed ? "flex justify-center" : "px-1")}>
+          <AccountSelector collapsed={isCollapsed} />
+        </div>
         {navItems.map((item) => {
           const isActive =
             item.href === "/"
