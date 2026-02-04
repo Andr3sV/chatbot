@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -33,7 +34,13 @@ export function Sidebar() {
     >
       <div className="flex flex-col gap-1 p-4">
         <div className="mb-3 px-3">
-          <span className="text-xl font-semibold text-primary">Plinng</span>
+          <Image
+            src="/Plinng.png"
+            alt="Plinng"
+            width={120}
+            height={40}
+            className="h-8 w-auto object-contain object-left"
+          />
         </div>
         <div className="mb-4 px-1">
           <AccountSelector />
