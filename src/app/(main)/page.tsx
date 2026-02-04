@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Menu, Bell, MessageCircle, Eye } from "lucide-react";
 import { AccountSelector } from "@/components/home/AccountSelector";
+import { HomeMenuDrawer } from "@/components/home/HomeMenuDrawer";
+import { NotificationsDrawer } from "@/components/home/NotificationsDrawer";
 import { MayaInsightsBlock } from "@/components/home/MayaInsightsBlock";
 import { PropuestasCarousel } from "@/components/home/PropuestasCarousel";
 import { ChannelMetricCard } from "@/components/home/ChannelMetricCard";
@@ -26,12 +29,21 @@ const MOCK_INSTAGRAM = {
 };
 
 export default function HomePage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#F5F5EB]">
+      <HomeMenuDrawer isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <NotificationsDrawer
+        isOpen={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+      />
       {/* Header: menu + selector cuenta centrado + ajustes (estilo como lista conversaciones) */}
       <header className="flex h-16 items-center justify-between gap-2 bg-[#F5F5EB] px-4 pt-3 md:h-14 md:pt-0 lg:px-8 rounded-b-2xl lg:rounded-b-none">
         <button
           type="button"
+          onClick={() => setMenuOpen(true)}
           className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-black/5 md:h-9 md:w-9 lg:hidden"
           aria-label="Menú"
         >
@@ -41,13 +53,14 @@ export default function HomePage() {
           <AccountSelector />
         </div>
         <div className="hidden lg:flex flex-1" aria-hidden />
-        <Link
-          href="#"
+        <button
+          type="button"
+          onClick={() => setNotificationsOpen(true)}
           className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-black/5 md:h-9 md:w-9"
           aria-label="Notificaciones"
         >
           <Bell className="h-7 w-7 md:h-4 md:w-4" />
-        </Link>
+        </button>
       </header>
 
       <div className="flex-1 px-4 py-6 lg:px-8 lg:py-8 max-w-6xl mx-auto w-full">
