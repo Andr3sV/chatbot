@@ -31,7 +31,7 @@ export function BottomNav() {
       {/* Contenedor iconos: solo este tiene fondo sidebar */}
       <div
         className={cn(
-          "flex flex-1 justify-around items-center min-w-0 h-[72px] px-4 rounded-[30px]",
+          "flex flex-1 justify-around items-center min-w-0 h-[66px] px-3 rounded-[26px]",
           "shadow-[0_-4px_20px_rgba(0,0,0,0.06)]",
           "border-t border-x border-[hsl(var(--sidebar-border))]",
           "bg-[hsl(var(--sidebar-background))]"
@@ -45,14 +45,14 @@ export function BottomNav() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center justify-center min-w-[48px] h-12 rounded-xl transition-colors shrink-0",
+                  "flex items-center justify-center min-w-[44px] h-11 rounded-xl transition-colors shrink-0",
                   isActive
                     ? "bg-black text-white"
                     : "text-foreground/70 hover:text-foreground"
                 )}
                 aria-label={item.href === "/" ? "Home" : item.href === "/posts" ? "Visibilidad" : item.href === "/conversaciones" ? "Comunicación" : item.href === "/reputacion" ? "Reputación" : "Competidores"}
               >
-                <Icon className="h-6 w-6 shrink-0" />
+                <Icon className="h-[22px] w-[22px] shrink-0" />
               </Link>
             );
           })}
@@ -60,15 +60,15 @@ export function BottomNav() {
       {/* Maya: fuera del contenedor con fondo, sin fondo propio */}
       <Link
         href="/"
-        className="flex shrink-0 items-center justify-center w-16 h-16 min-w-[64px]"
+        className="flex shrink-0 items-center justify-center w-14 h-14 min-w-[56px]"
         aria-label="Maya, agente IA"
       >
-        <div className="relative h-14 w-14 overflow-hidden rounded-full ring-[0.1px] ring-[#B988F8] ring-offset-2 ring-offset-transparent">
+        <div className="relative h-12 w-12 overflow-hidden rounded-full ring-[0.1px] ring-[#B988F8] ring-offset-2 ring-offset-transparent">
             <Image
               src="/maya.png"
               alt="Maya"
-              width={56}
-              height={56}
+              width={48}
+              height={48}
               className="h-full w-full object-cover"
             />
           </div>
