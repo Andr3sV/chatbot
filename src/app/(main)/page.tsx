@@ -67,7 +67,7 @@ export default function HomePage() {
         {/* 1. Maya insights */}
         <MayaInsightsBlock />
 
-        {/* 2. Visibilidad: Mis propuestas */}
+        {/* 2. Visibilidad: Próximas publicaciones + Mis propuestas */}
         <section className="space-y-3 mb-8">
           <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
             <Eye className="h-5 w-5 text-muted-foreground" />

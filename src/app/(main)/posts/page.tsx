@@ -74,8 +74,17 @@ function PostsPageContent() {
       setFilter(filterParam as PostFilter);
     }
   }, [filterParam]);
-  const [viewMode, setViewMode] = React.useState<"list" | "calendar">("list");
+  const viewParam = searchParams.get("view");
+  const initialView: "list" | "calendar" =
+    viewParam === "calendar" ? "calendar" : "list";
+  const [viewMode, setViewMode] = React.useState<"list" | "calendar">(initialView);
   const [selectedDate, setSelectedDate] = React.useState<string | null>(null);
+
+  useEffect(() => {
+    if (viewParam === "calendar" || viewParam === "list") {
+      setViewMode(viewParam);
+    }
+  }, [viewParam]);
 
   const selectedDatePosts = selectedDate ? (postsByDate[selectedDate] ?? []) : [];
 
@@ -92,12 +101,20 @@ function PostsPageContent() {
             <h1 className="text-xl font-semibold text-foreground truncate">Propuestas</h1>
           </div>
           <div className="flex items-center gap-1 shrink-0">
-            <button type="button" onClick={() => setViewMode("list")} className={cn("flex items-center justify-center w-9 h-9 rounded-full transition-colors", viewMode === "list" ? "bg-black text-white" : "text-foreground/70 hover:bg-accent/20")} aria-label="Vista lista">
+            <Link
+              href={`/posts?filter=${filter}&view=list`}
+              className={cn("flex items-center justify-center w-9 h-9 rounded-full transition-colors", viewMode === "list" ? "bg-black text-white" : "text-foreground/70 hover:bg-accent/20")}
+              aria-label="Vista lista"
+            >
               <List className="h-5 w-5" />
-            </button>
-            <button type="button" onClick={() => setViewMode("calendar")} className={cn("flex items-center justify-center w-9 h-9 rounded-full transition-colors", viewMode === "calendar" ? "bg-black text-white" : "text-foreground/70 hover:bg-accent/20")} aria-label="Vista calendario">
+            </Link>
+            <Link
+              href={`/posts?filter=${filter}&view=calendar`}
+              className={cn("flex items-center justify-center w-9 h-9 rounded-full transition-colors", viewMode === "calendar" ? "bg-black text-white" : "text-foreground/70 hover:bg-accent/20")}
+              aria-label="Vista calendario"
+            >
               <CalendarDays className="h-5 w-5" />
-            </button>
+            </Link>
           </div>
         </div>
       </header>

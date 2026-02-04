@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Instagram, Calendar } from "lucide-react";
+import { Instagram, Calendar, List, CalendarDays } from "lucide-react";
 import { propuestasPendientes } from "@/lib/mock-posts";
 import { cn } from "@/lib/utils";
 
@@ -15,12 +15,22 @@ export function PropuestasCarousel() {
         <h2 className="text-lg font-semibold text-foreground">
           Mis propuestas
         </h2>
-        <Link
-          href={propuestasPendientes.length > 0 ? "/posts?filter=pendientes" : "/posts?filter=proximas"}
-          className="text-sm font-medium text-foreground underline underline-offset-2 hover:text-foreground/80 transition-colors shrink-0"
-        >
-          Ver todo
-        </Link>
+        <div className="flex items-center gap-0 shrink-0">
+          <Link
+            href={propuestasPendientes.length > 0 ? "/posts?filter=pendientes&view=list" : "/posts?filter=proximas&view=list"}
+            className="flex items-center justify-center w-11 h-11 rounded-full text-foreground/70 hover:bg-accent/20 transition-colors"
+            aria-label="Vista lista"
+          >
+            <List className="h-6 w-6" />
+          </Link>
+          <Link
+            href={propuestasPendientes.length > 0 ? "/posts?filter=pendientes&view=calendar" : "/posts?filter=proximas&view=calendar"}
+            className="flex items-center justify-center w-11 h-11 rounded-full text-foreground/70 hover:bg-accent/20 transition-colors"
+            aria-label="Vista calendario"
+          >
+            <CalendarDays className="h-6 w-6" />
+          </Link>
+        </div>
       </div>
       <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
         {propuestasPendientes.map((post) => (
