@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Bell, MessageCircle, Eye, ExternalLink, FileText } from "lucide-react";
+import { Menu, Bell, MessageCircle, Eye, ExternalLink, FileText, Maximize2 } from "lucide-react";
 import { AccountSelector } from "@/components/home/AccountSelector";
 import { HomeMenuDrawer } from "@/components/home/HomeMenuDrawer";
 import { NotificationsDrawer } from "@/components/home/NotificationsDrawer";
@@ -32,6 +32,9 @@ const MOCK_WEBS = {
   contenidoGenerado: 24,
   tiempoAhorrado: "12h",
 };
+
+const MOCK_SCORE = 87;
+const MOCK_TIEMPO_TOTAL = "~14h";
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -72,7 +75,33 @@ export default function HomePage() {
         {/* 1. Maya insights */}
         <MayaInsightsBlock />
 
-        {/* 2. Visibilidad: Mis propuestas + Webs activas */}
+        {/* 2. Score y Tiempo ahorrado */}
+        <div className="flex gap-3 mb-8">
+          <Link href="/score" className="flex-1 min-w-0 rounded-2xl p-4 relative overflow-hidden bg-white border border-border block transition-all hover:shadow-md hover:border-primary/20">
+            <img
+              src="/Vector%20(6).svg"
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
+              aria-hidden
+            />
+            <Maximize2 className="absolute top-4 right-4 h-3.5 w-3.5 text-foreground/60 z-10" aria-hidden />
+            <p className="text-[11px] font-medium text-foreground/80 uppercase tracking-wide relative z-10">Score</p>
+            <p className="text-3xl font-bold tabular-nums text-foreground mt-0.5 relative z-10">{MOCK_SCORE}</p>
+          </Link>
+          <Link href="/tiempo-ahorrado" className="flex-1 min-w-0 rounded-2xl p-4 relative overflow-hidden bg-white border border-border block transition-all hover:shadow-md hover:border-primary/20">
+            <img
+              src="/Vector%20(6).svg"
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
+              aria-hidden
+            />
+            <Maximize2 className="absolute top-4 right-4 h-3.5 w-3.5 text-foreground/60 z-10" aria-hidden />
+            <p className="text-[11px] font-medium text-foreground/80 uppercase tracking-wide relative z-10">Tiempo ahorrado</p>
+            <p className="text-3xl font-bold tabular-nums text-foreground mt-0.5 relative z-10">{MOCK_TIEMPO_TOTAL}</p>
+          </Link>
+        </div>
+
+        {/* 3. Visibilidad: Mis propuestas + Webs activas */}
         <section className="space-y-3 mb-8">
           <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
             <Eye className="h-5 w-5 text-muted-foreground" />
@@ -120,7 +149,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 3. Comunicación: WhatsApp, Instagram y Llamadas */}
+        {/* 4. Comunicación: WhatsApp, Instagram y Llamadas */}
         <section className="space-y-3 mb-8">
           <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
             <MessageCircle className="h-5 w-5 text-muted-foreground" />
@@ -161,10 +190,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 4. Reputación */}
+        {/* 5. Reputación */}
         <ReputacionCard />
 
-        {/* 5. Competidores */}
+        {/* 6. Competidores */}
         <CompetidoresCard />
       </div>
     </div>
