@@ -20,16 +20,16 @@ import { propuestasPendientes } from "@/lib/mock-posts";
 import { MayaMessageBlock } from "@/components/home/MayaInsightsBlock";
 
 const proximasPropuestas = [
-  { id: "n1", title: "Menú de temporada primavera", scheduledAt: "24 Feb 2025, 14:00", imagePlaceholder: "bg-gradient-to-br from-amber-100 to-orange-100" },
-  { id: "n2", title: "Horario de tapas y vino", scheduledAt: "26 Feb 2025, 11:00", imagePlaceholder: "bg-gradient-to-br from-slate-100 to-slate-200" },
-  { id: "n3", title: "Nueva carta de vinos", scheduledAt: "1 Mar 2025, 09:00", imagePlaceholder: "bg-gradient-to-br from-emerald-50 to-teal-100" },
-  { id: "n4", title: "Evento: noche de jazz y vino", scheduledAt: "3 Mar 2025, 18:00", imagePlaceholder: "bg-gradient-to-br from-violet-50 to-purple-100" },
+  { id: "n1", title: "Menú de temporada primavera", scheduledAt: "5 Mar 2026, 14:00", imagePlaceholder: "bg-gradient-to-br from-amber-100 to-orange-100" },
+  { id: "n2", title: "Horario de tapas y vino", scheduledAt: "12 Mar 2026, 11:00", imagePlaceholder: "bg-gradient-to-br from-slate-100 to-slate-200" },
+  { id: "n3", title: "Nueva carta de vinos", scheduledAt: "18 Mar 2026, 09:00", imagePlaceholder: "bg-gradient-to-br from-emerald-50 to-teal-100" },
+  { id: "n4", title: "Evento: noche de jazz y vino", scheduledAt: "24 Mar 2026, 18:00", imagePlaceholder: "bg-gradient-to-br from-violet-50 to-purple-100" },
 ];
 
 const propuestasAprobadas = [
-  { id: "a1", title: "Inauguración terraza de verano", platform: "Instagram", scheduledAt: "25 Feb 2025, 11:00", imagePlaceholder: "bg-gradient-to-br from-pink-50 to-rose-100" },
-  { id: "a2", title: "Vino de la casa del mes", platform: "Instagram", scheduledAt: "28 Feb 2025, 09:00", imagePlaceholder: "bg-gradient-to-br from-green-100 to-emerald-100" },
-  { id: "a3", title: "Reseña: cena de aniversario", platform: "Instagram", scheduledAt: "2 Mar 2025, 18:00", imagePlaceholder: "bg-gradient-to-br from-amber-50 to-yellow-100" },
+  { id: "a1", title: "Inauguración terraza de verano", platform: "Instagram", scheduledAt: "10 Jan 2026, 11:00", imagePlaceholder: "bg-gradient-to-br from-pink-50 to-rose-100" },
+  { id: "a2", title: "Vino de la casa del mes", platform: "Instagram", scheduledAt: "18 Jan 2026, 09:00", imagePlaceholder: "bg-gradient-to-br from-green-100 to-emerald-100" },
+  { id: "a3", title: "Reseña: cena de aniversario", platform: "Instagram", scheduledAt: "25 Jan 2026, 18:00", imagePlaceholder: "bg-gradient-to-br from-amber-50 to-yellow-100" },
 ];
 
 const allScheduledPosts = [
@@ -59,22 +59,42 @@ const TYPE_STYLES = {
 
 const VALID_FILTERS: PostFilter[] = ["pendientes", "proximas", "aprobadas"];
 
+const FILTER_TO_TYPE: Record<PostFilter, "pendiente" | "proxima" | "aprobada"> = {
+  pendientes: "pendiente",
+  proximas: "proxima",
+  aprobadas: "aprobada",
+};
+
+function filterPostsByType(postsByDate: Record<string, typeof allScheduledPosts>, filter: PostFilter): Record<string, typeof allScheduledPosts> {
+  const type = FILTER_TO_TYPE[filter];
+  const result: Record<string, typeof allScheduledPosts> = {};
+  Object.entries(postsByDate).forEach(([key, posts]) => {
+    const filtered = posts.filter((p) => p.type === type);
+    if (filtered.length > 0) result[key] = filtered;
+  });
+  return result;
+}
+
 function PostsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const filterParam = searchParams.get("filter");
+  const viewParam = searchParams.get("view");
   const initialFilter: PostFilter =
     filterParam && VALID_FILTERS.includes(filterParam as PostFilter)
       ? (filterParam as PostFilter)
-      : "proximas";
+      : viewParam === "calendar"
+        ? "pendientes"
+        : "proximas";
   const [filter, setFilter] = React.useState<PostFilter>(initialFilter);
 
   useEffect(() => {
     if (filterParam && VALID_FILTERS.includes(filterParam as PostFilter)) {
       setFilter(filterParam as PostFilter);
+    } else if (viewParam === "calendar" && !filterParam) {
+      setFilter("pendientes");
     }
-  }, [filterParam]);
-  const viewParam = searchParams.get("view");
+  }, [filterParam, viewParam]);
   const initialView: "list" | "calendar" =
     viewParam === "calendar" ? "calendar" : "list";
   const [viewMode, setViewMode] = React.useState<"list" | "calendar">(initialView);
@@ -86,7 +106,8 @@ function PostsPageContent() {
     }
   }, [viewParam]);
 
-  const selectedDatePosts = selectedDate ? (postsByDate[selectedDate] ?? []) : [];
+  const filteredPostsByDate = filterPostsByType(postsByDate, filter);
+  const selectedDatePosts = selectedDate ? (filteredPostsByDate[selectedDate] ?? []) : [];
 
   const chatBg = "bg-[#FBFBF7]";
 
@@ -122,9 +143,9 @@ function PostsPageContent() {
       <div className={`flex-1 px-4 py-6 lg:px-8 lg:py-8 max-w-4xl mx-auto w-full ${chatBg}`}>
         <div className="flex overflow-x-auto gap-2 mb-6 pb-1 -mx-1 px-1 overflow-y-hidden scrollbar-hide">
           <div className="flex gap-2 flex-nowrap min-w-0">
-            <button type="button" onClick={() => setFilter("proximas")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "proximas" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Próximas</button>
-            <button type="button" onClick={() => setFilter("pendientes")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "pendientes" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Pendientes de aprobar</button>
-            <button type="button" onClick={() => setFilter("aprobadas")} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "aprobadas" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Aprobadas</button>
+            <Link href={`/posts?filter=proximas&view=${viewMode}`} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "proximas" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Próximas</Link>
+            <Link href={`/posts?filter=pendientes&view=${viewMode}`} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "pendientes" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Pendientes de aprobar</Link>
+            <Link href={`/posts?filter=aprobadas&view=${viewMode}`} className={cn("px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap shrink-0", filter === "aprobadas" ? "bg-black text-white" : "bg-white border border-border text-foreground hover:bg-accent/30")}>Aprobadas</Link>
           </div>
         </div>
 
@@ -204,8 +225,9 @@ function PostsPageContent() {
         {viewMode === "calendar" && (
           <div className="space-y-6">
             {[
-              { year: 2025, month: 1, title: "Febrero 2025" },
-              { year: 2025, month: 2, title: "Marzo 2025" },
+              { year: 2026, month: 0, title: "Enero 2026" },
+              { year: 2026, month: 1, title: "Febrero 2026" },
+              { year: 2026, month: 2, title: "Marzo 2026" },
             ].map(({ year, month, title }) => (
               <div key={`${year}-${month}`} className="rounded-xl border border-[#C3C3C3] bg-white overflow-hidden">
                 <p className="text-sm font-medium text-foreground px-3 py-2 border-b border-border">{title}</p>
@@ -214,7 +236,7 @@ function PostsPageContent() {
                     <div key={d} className="py-2">{d}</div>
                   ))}
                 </div>
-                <CalendarGrid year={year} month={month} postsByDate={postsByDate} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+                <CalendarGrid year={year} month={month} postsByDate={filteredPostsByDate} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
               </div>
             ))}
             {selectedDate && (
@@ -234,11 +256,6 @@ function PostsPageContent() {
                 </div>
               </div>
             )}
-            <div className="flex flex-wrap gap-4 text-xs text-foreground/80 pt-2">
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />Pendiente de revisión</span>
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />Aprobada</span>
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-slate-500 shrink-0" />Próxima propuesta</span>
-            </div>
           </div>
         )}
       </div>
@@ -266,21 +283,48 @@ function CalendarGrid({ year, month, postsByDate, selectedDate, onSelectDate }: 
   return (
     <div className="grid grid-cols-7">
       {cells.map((day, i) => {
-        if (day === null) return <div key={`empty-${i}`} className="min-h-[44px]" />;
+        if (day === null) return <div key={`empty-${i}`} className="min-h-[44px] aspect-square" />;
         const key = dateKey(day);
         const dayPosts = postsByDate[key] ?? [];
         const hasPosts = dayPosts.length > 0;
-        const typesPresent = Array.from(new Set(dayPosts.map((p) => p.type))) as Array<keyof typeof TYPE_STYLES>;
+        const imagePost = dayPosts.find((p) => p.type === "pendiente" || p.type === "aprobada");
+        const hasProximas = dayPosts.some((p) => p.type === "proxima");
+        const showImage = !!imagePost;
+        const showGreen = hasProximas && !showImage;
         const isSelected = selectedDate === key;
+
         return (
-          <button key={key} type="button" onClick={() => onSelectDate(key)} className={cn("min-h-[44px] flex flex-col items-center justify-center text-sm transition-colors rounded-full", isSelected ? "bg-black text-white" : "text-foreground hover:bg-accent/20", hasPosts && !isSelected && "font-medium")}>
-            {day}
-            {hasPosts && (
-              <div className="flex items-center gap-0.5 mt-1">
-                {typesPresent.map((type) => (
-                  <span key={type} className={cn("w-1.5 h-1.5 rounded-full shrink-0", isSelected ? type === "pendiente" ? "bg-red-300" : type === "aprobada" ? "bg-emerald-300" : "bg-slate-300" : TYPE_STYLES[type].dot)} title={TYPE_STYLES[type].label} />
-                ))}
+          <button
+            key={key}
+            type="button"
+            onClick={() => onSelectDate(key)}
+            className={cn(
+              "min-h-[44px] aspect-square flex items-center justify-center text-sm transition-colors rounded-lg overflow-hidden",
+              isSelected && "ring-2 ring-black ring-offset-1",
+              showGreen && !isSelected && "bg-[#BEFF50]",
+            )}
+          >
+            {showImage && !isSelected ? (
+              <div className="relative w-full h-full min-h-[44px]">
+                {"image" in imagePost && imagePost.image ? (
+                  <Image src={imagePost.image} alt="" fill className="object-cover" sizes="80px" />
+                ) : (
+                  <div className={cn("absolute inset-0", imagePost.imagePlaceholder)} />
+                )}
+                <span className="absolute bottom-0.5 right-0.5 px-1 rounded text-[10px] font-semibold bg-black/60 text-white leading-tight">
+                  {day}
+                </span>
               </div>
+            ) : (
+              <span
+                className={cn(
+                  "flex items-center justify-center w-full h-full min-h-[44px] rounded-lg",
+                  isSelected ? "bg-black text-white font-medium" : "text-foreground hover:bg-accent/20",
+                  hasPosts && !isSelected && !showGreen && "font-medium",
+                )}
+              >
+                {day}
+              </span>
             )}
           </button>
         );

@@ -5,7 +5,7 @@ export const propuestasPendientes = [
     caption:
       "Nuestra carta de vinos te espera. Maridajes sugeridos y ambiente único. Reserva tu mesa. #VinoYCena #BarDeVinos #Reservas",
     platform: "Instagram",
-    scheduledAt: "18 Feb 2025, 10:00",
+    scheduledAt: "18 Feb 2026, 10:00",
     image: "/Imagen1.jpg",
     imagePlaceholder: "bg-gradient-to-br from-amber-100 to-green-100",
   },
@@ -15,7 +15,7 @@ export const propuestasPendientes = [
     caption:
       "Únete a nuestra cata guiada. Varietales españoles y charcutería de la casa. Plazas limitadas. #CataDeVinos #ViernesDeVino",
     platform: "Instagram",
-    scheduledAt: "20 Feb 2025, 12:00",
+    scheduledAt: "20 Feb 2026, 12:00",
     image: "/Imagen2.jpg",
     imagePlaceholder: "bg-gradient-to-br from-green-50 to-emerald-100",
   },
@@ -25,7 +25,7 @@ export const propuestasPendientes = [
     caption:
       "Tapas creadas para acompañar cada copa. Te esperamos de martes a domingo. #Tapas #Maridaje #BarDeVinos",
     platform: "Instagram",
-    scheduledAt: "22 Feb 2025, 09:00",
+    scheduledAt: "22 Feb 2026, 09:00",
     image: "/Imagen3.jpg",
     imagePlaceholder: "bg-gradient-to-br from-teal-50 to-cyan-100",
   },
