@@ -40,7 +40,7 @@ export function MayaMessageBlock({ message }: { message: React.ReactNode }) {
         />
       </div>
       <div className="relative min-w-0 flex-1">
-        <div className="relative rounded-2xl rounded-bl-md bg-[#EEFFC7] px-4 py-3 shadow-sm">
+        <div className="relative rounded-2xl rounded-bl-md bg-[#BEFF50] px-4 py-3 shadow-sm">
           <div
             className="absolute left-0 top-6 -translate-x-1/2"
             style={{
@@ -48,7 +48,7 @@ export function MayaMessageBlock({ message }: { message: React.ReactNode }) {
               height: 0,
               borderTop: "8px solid transparent",
               borderBottom: "8px solid transparent",
-              borderRight: "12px solid #EEFFC7",
+              borderRight: "12px solid #BEFF50",
             }}
           />
           <p className="text-sm font-semibold text-foreground">Maya</p>
@@ -85,7 +85,7 @@ export function MayaInsightsBlock() {
       </div>
       {/* Burbuja de diálogo con cola apuntando a Maya */}
       <div className="relative min-w-0 flex-1">
-        <div className="relative rounded-2xl rounded-bl-md bg-[#EEFFC7] px-4 py-3 shadow-sm">
+        <div className="relative rounded-2xl rounded-bl-md bg-[#BEFF50] px-4 py-3 shadow-sm">
           {/* Cola de la burbuja */}
           <div
             className="absolute left-0 top-6 -translate-x-1/2"
@@ -94,7 +94,7 @@ export function MayaInsightsBlock() {
               height: 0,
               borderTop: "8px solid transparent",
               borderBottom: "8px solid transparent",
-              borderRight: "12px solid #EEFFC7",
+              borderRight: "12px solid #BEFF50",
             }}
           />
           <p className="text-sm font-semibold text-foreground">Maya</p>
