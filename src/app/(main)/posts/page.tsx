@@ -59,11 +59,8 @@ const TYPE_STYLES = {
 
 const VALID_FILTERS: PostFilter[] = ["pendientes", "proximas", "aprobadas"];
 
-const CALENDAR_MONTHS = [
-  { year: 2026, month: 0, title: "Enero 2026" },
-  { year: 2026, month: 1, title: "Febrero 2026" },
-  { year: 2026, month: 2, title: "Marzo 2026" },
-];
+const MONTH_NAMES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+const MONTHS_TO_SHOW = 6;
 
 const FILTER_TO_TYPE: Record<PostFilter, "pendiente" | "proxima" | "aprobada"> = {
   pendientes: "pendiente",
@@ -81,13 +78,27 @@ function filterPostsByType(postsByDate: Record<string, typeof allScheduledPosts>
   return result;
 }
 
-function getTargetMonthForFilter(filter: PostFilter, filteredPostsByDate: Record<string, typeof allScheduledPosts>): { year: number; month: number } | null {
+function getVisibleMonthsForFilter(filteredPostsByDate: Record<string, typeof allScheduledPosts>): Array<{ year: number; month: number; title: string }> {
   const dateKeys = Object.keys(filteredPostsByDate);
-  if (dateKeys.length === 0) return null;
+  if (dateKeys.length === 0) return [];
   const sorted = dateKeys.sort();
-  const targetKey = filter === "aprobadas" ? sorted[sorted.length - 1] : sorted[0];
-  const [year, month] = targetKey.split("-").map(Number);
-  return { year, month: month - 1 };
+  const [startYear, startMonth] = sorted[0].split("-").map(Number);
+  const months: Array<{ year: number; month: number; title: string }> = [];
+  let y = startYear;
+  let m = startMonth - 1;
+  for (let i = 0; i < MONTHS_TO_SHOW; i++) {
+    months.push({
+      year: y,
+      month: m,
+      title: `${MONTH_NAMES[m]} ${y}`,
+    });
+    m++;
+    if (m > 11) {
+      m = 0;
+      y++;
+    }
+  }
+  return months;
 }
 
 function PostsPageContent() {
@@ -123,15 +134,7 @@ function PostsPageContent() {
 
   const filteredPostsByDate = filterPostsByType(postsByDate, filter);
   const selectedDatePosts = selectedDate ? (filteredPostsByDate[selectedDate] ?? []) : [];
-  const targetMonth = getTargetMonthForFilter(filter, filteredPostsByDate);
-  const monthRefs = React.useRef<Record<string, HTMLDivElement | null>>({});
-
-  useEffect(() => {
-    if (viewMode === "calendar" && targetMonth) {
-      const key = `${targetMonth.year}-${targetMonth.month}`;
-      monthRefs.current[key]?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [filter, viewMode, targetMonth?.year, targetMonth?.month]);
+  const visibleMonths = getVisibleMonthsForFilter(filteredPostsByDate);
 
   const chatBg = "bg-[#FBFBF7]";
 
@@ -248,12 +251,8 @@ function PostsPageContent() {
 
         {viewMode === "calendar" && (
           <div className="space-y-6">
-            {CALENDAR_MONTHS.map(({ year, month, title }) => (
-              <div
-                key={`${year}-${month}`}
-                ref={(el) => { monthRefs.current[`${year}-${month}`] = el; }}
-                className="rounded-xl border border-[#C3C3C3] bg-white overflow-hidden"
-              >
+            {visibleMonths.map(({ year, month, title }) => (
+              <div key={`${year}-${month}`} className="rounded-xl border border-[#C3C3C3] bg-white overflow-hidden">
                 <p className="text-sm font-medium text-foreground px-3 py-2 border-b border-border">{title}</p>
                 <div className="grid grid-cols-7 text-center text-xs font-medium text-foreground/70 border-b border-border">
                   {WEEKDAYS.map((d) => (
