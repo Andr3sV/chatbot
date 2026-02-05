@@ -25,7 +25,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 flex items-end justify-between px-3 gap-2"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-[1100] flex items-end justify-between px-3 gap-2"
       style={{ paddingBottom: "max(10px, calc(10px + env(safe-area-inset-bottom, 0px)))" }}
     >
       {/* Contenedor iconos: solo este tiene fondo sidebar */}

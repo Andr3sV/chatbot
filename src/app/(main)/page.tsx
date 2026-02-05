@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Bell, MessageCircle, Eye } from "lucide-react";
+import { Menu, Bell, MessageCircle, Eye, ExternalLink, FileText } from "lucide-react";
 import { AccountSelector } from "@/components/home/AccountSelector";
 import { HomeMenuDrawer } from "@/components/home/HomeMenuDrawer";
 import { NotificationsDrawer } from "@/components/home/NotificationsDrawer";
@@ -26,6 +26,11 @@ const MOCK_WHATSAPP = {
 const MOCK_INSTAGRAM = {
   respondidos: 8,
   pendientes: 2,
+};
+
+const MOCK_WEBS = {
+  contenidoGenerado: 24,
+  tiempoAhorrado: "12h",
 };
 
 export default function HomePage() {
@@ -67,13 +72,52 @@ export default function HomePage() {
         {/* 1. Maya insights */}
         <MayaInsightsBlock />
 
-        {/* 2. Visibilidad: Próximas publicaciones + Mis propuestas */}
+        {/* 2. Visibilidad: Mis propuestas + Webs activas */}
         <section className="space-y-3 mb-8">
           <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
             <Eye className="h-5 w-5 text-muted-foreground" />
             Visibilidad
           </h2>
           <PropuestasCarousel />
+          <div className="rounded-xl border border-border bg-white p-4">
+            <h2 className="text-lg font-semibold text-foreground mb-3">Webs activas</h2>
+            <div className="flex items-center justify-between gap-3">
+              <a
+                href="https://www.matiasbuenosdias.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm text-foreground truncate min-w-0 hover:text-foreground/80 transition-colors"
+              >
+                <span className="truncate">www.matiasbuenosdias.com</span>
+                <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+              </a>
+              <span
+                className="shrink-0 px-2.5 py-1 rounded-full text-xs font-medium text-foreground"
+                style={{ backgroundColor: "#38ED82" }}
+              >
+                Velocidad excelente
+              </span>
+            </div>
+          </div>
+          <div
+            className="rounded-xl border border-border bg-white p-4 transition-all duration-200 hover:shadow-md hover:border-primary/30"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#38ED82]/20">
+                <FileText className="h-5 w-5 text-[#38ED82]" />
+              </div>
+              <div className="min-w-0 flex-1 flex gap-2">
+                <div className="min-w-0 flex-1 rounded-lg border border-border/60 bg-white/60 px-3 py-2">
+                  <p className="text-lg font-bold tabular-nums text-foreground">{MOCK_WEBS.contenidoGenerado}</p>
+                  <p className="text-[11px] text-foreground/60 truncate">Contenido generado</p>
+                </div>
+                <div className="min-w-0 flex-1 rounded-lg border border-border/60 bg-white/60 px-3 py-2">
+                  <p className="text-lg font-bold tabular-nums text-foreground">~{MOCK_WEBS.tiempoAhorrado}</p>
+                  <p className="text-[11px] text-foreground/60 truncate">Tiempo ahorrado</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* 3. Comunicación: WhatsApp, Instagram y Llamadas */}

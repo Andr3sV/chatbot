@@ -54,6 +54,16 @@
   background-color: hsl(var(--chat-background));
 }
 
+/* Mapa competencia: ocupar todo el ancho del contenedor */
+.competencia-map-wrapper {
+  width: 100%;
+}
+.competencia-map-wrapper .leaflet-container {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
+
 @layer base {
   * {
     @apply border-border;
